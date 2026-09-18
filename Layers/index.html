@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS @layer — Cascade Layers</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Barre de navigation supérieure -->
+  <header class="top-bar">
+    <a href="../index.html" class="back-link">
+      <span>←</span> Retour au sommaire
+    </a>
+    <ul class="nav-links">
+      <li><a href="#explication">Explication</a></li>
+      <li><a href="#syntaxe">Syntaxe</a></li>
+      <li><a href="#demo">Démo Live</a></li>
+      <li><a href="#compatibilite">Compatibilité</a></li>
+      <li><a href="#fallback">Fallback</a></li>
+    </ul>
+  </header>
+
+  <div class="container">
+
+    <!-- En-tête de la fiche -->
+    <div class="hero-header">
+      <div class="meta-badges">
+        <span class="badge badge-tag">Règle At (@-rule) / Spécificité</span>
+        <span class="badge badge-date">📅 Introduit en 2022</span>
+        <span class="badge badge-baseline">✓ Baseline Widely Available</span>
+      </div>
+      <h1>@layer</h1>
+      <p class="baseline-text">
+        Maîtrisez l'ordre de priorité de la cascade CSS sans surenchère de spécificité ni recours abusif à <code>!important</code>.
+      </p>
+    </div>
+
+    <!-- 1. Explication en français (5-10 lignes) -->
+    <section id="explication" class="content-section">
+      <h2>📖 1. Explication</h2>
+      <p>
+        L'un des défis historiques majeurs du CSS est la gestion des conflits de styles : lorsqu'une bibliothèque tierce (ex: Bootstrap, Tailwind) utilise des sélecteurs très spécifiques (comme <code>.nav &gt; ul &gt; li.active a</code>), écraser ces règles obligeait les développeurs à créer des sélecteurs encore plus longs ou à polluer le code avec des <code>!important</code>.
+      </p>
+      <p>
+        La règle <code>@layer</code> (Cascade Layers) introduit une hiérarchie explicite de couches. L'ordre des couches prime désormais sur la spécificité des sélecteurs : une règle déclarée dans une couche supérieure l'emportera toujours sur une règle d'une couche inférieure, même si le sélecteur de la couche supérieure est beaucoup plus court ou simple.
+      </p>
+      <p>
+        Les couches non ordonnées ou le code CSS classique situé hors de tout <code>@layer</code> conservent toujours la priorité maximale par défaut, assurant une intégration progressive et sans friction.
+      </p>
+    </section>
+
+    <!-- 2. Bloc de code montrant la syntaxe -->
+    <section id="syntaxe" class="content-section">
+      <h2>💻 2. Syntaxe</h2>
+      <p>La déclaration de l'ordre des couches en haut de feuille de style permet d'établir la hiérarchie en un coup d'œil :</p>
+
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span>CSS</span>
+          <span>cascade-layers.css</span>
+        </div>
+        <pre><code><span class="hl-comment">/* 1. Définition explicite de l'ordre de priorité (de la moins prioritaire à la plus forte) */</span>
+<span class="hl-prop">@layer</span> <span class="hl-val">reset, framework, components, overrides</span><span class="hl-punct">;</span>
+
+<span class="hl-comment">/* 2. Couche basse : même avec une très haute spécificité, elle perd face aux couches supérieures */</span>
+<span class="hl-prop">@layer</span> <span class="hl-val">reset</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">body .site-header nav ul li.item a</span> <span class="hl-punct">{</span>
+    <span class="hl-prop">color</span><span class="hl-punct">:</span> <span class="hl-val">#94a3b8</span><span class="hl-punct">;</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 3. Couche haute : un sélecteur de classe simple l'emporte facilement sans forcer */</span>
+<span class="hl-prop">@layer</span> <span class="hl-val">overrides</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">.btn</span> <span class="hl-punct">{</span>
+    <span class="hl-prop">color</span><span class="hl-punct">:</span> <span class="hl-val">#10b981</span><span class="hl-punct">;</span> <span class="hl-comment">/* Gagne sur toute règle des couches reset ou framework */</span>
+  <span class="hl-prop">background-color</span><span class="hl-punct">:</span> <span class="hl-val">#0f172a</span><span class="hl-punct">;</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 4. Importation directe d'une feuille externe dans une couche */</span>
+<span class="hl-prop">@import</span> <span class="hl-val">url("bootstrap.css") layer(framework)</span><span class="hl-punct">;</span></code></pre>
+      </div>
+    </section>
+
+    <!-- 3. Démo live interactive -->
+    <section id="demo" class="content-section">
+      <h2>⚡ 3. Démo Live Interactive</h2>
+      <p>
+        Observez le comportement de la cascade : le bouton ci-dessous est stylisé par 3 couches concurrentes. Regardez quelle couche prend le contrôle :
+      </p>
+
+      <div class="demo-box">
+        <div class="demo-instruction">
+          <span>🍰</span> <strong>La couche gagne sur la spécificité :</strong> Malgré un sélecteur hyper lourd dans <code>@layer reset</code>, c'est le sélecteur d'une seule classe dans <code>@layer overrides</code> qui colore le bouton en émeraude !
+        </div>
+
+        <div class="layers-visualizer demo-scope">
+          <div class="layer-stack">
+            <div class="layer-item l-reset">
+              <div>
+                <strong>1. @layer reset</strong> (Priorité basse)<br>
+                <code>.demo-scope .btn-target.is-active[data-state="active"]</code>
+              </div>
+              <span class="layer-badge">Couleur rouge perdante</span>
+            </div>
+
+            <div class="layer-item l-framework">
+              <div>
+                <strong>2. @layer framework</strong> (Priorité intermédiaire)<br>
+                <code>.demo-scope .btn-target</code>
+              </div>
+              <span class="layer-badge">Couleur orange perdante</span>
+            </div>
+
+            <div class="layer-item l-overrides">
+              <div>
+                <strong>3. @layer overrides</strong> (Priorité haute)<br>
+                <code>.btn-target</code> (1 seule classe !)
+              </div>
+              <span class="layer-badge">👑 Couleur émeraude gagnante</span>
+            </div>
+          </div>
+
+          <div class="demo-action-area">
+            <!-- Bouton ayant toutes les classes et attributs ciblés par la couche reset -->
+            <button class="btn-target is-active" data-state="active">
+              Bouton soumis à @layer overrides (Émeraude)
+            </button>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; text-align: center;">
+              Inspectez ce bouton dans vos devtools : le sélecteur court de <code>overrides</code> écrase le sélecteur complexe de <code>reset</code>.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. Tableau de compatibilité -->
+    <section id="compatibilite" class="content-section">
+      <h2>🌍 4. Tableau de Compatibilité</h2>
+      <p>
+        Support de la règle <code>@layer</code> selon Can I Use & MDN :
+      </p>
+
+      <div class="compat-table-wrapper">
+        <table class="compat-table">
+          <thead>
+            <tr>
+              <th>Navigateur</th>
+              <th>Version minimale</th>
+              <th>Statut</th>
+              <th>Prise en charge</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌐</span> Google Chrome
+                </div>
+              </td>
+              <td><strong>99+</strong> (Mars 2022)</td>
+              <td><span class="status-badge status-supported">✓ Support complet</span></td>
+              <td><code>@layer</code> & <code>@import ... layer()</code></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🧭</span> Safari (macOS & iOS)
+                </div>
+              </td>
+              <td><strong>15.4+</strong> (Mars 2022)</td>
+              <td><span class="status-badge status-supported">✓ Support complet</span></td>
+              <td>Support natif complet</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🦊</span> Mozilla Firefox
+                </div>
+              </td>
+              <td><strong>97+</strong> (Fév. 2022)</td>
+              <td><span class="status-badge status-supported">✓ Support complet</span></td>
+              <td>Support natif complet</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌊</span> Microsoft Edge
+                </div>
+              </td>
+              <td><strong>99+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support complet</span></td>
+              <td>Chromium engine</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">⭕</span> Opera
+                </div>
+              </td>
+              <td><strong>85+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support complet</span></td>
+              <td>Chromium engine</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-title">💡 Baseline 2022 Widely Available</div>
+        <p style="font-size: 0.95rem; margin: 0;">
+          Arrivé simultanément dans tous les moteurs en début d'année 2022, <code>@layer</code> est supporté à plus de 96% mondialement et peut être employé sereinement en architecture CSS moderne.
+        </p>
+      </div>
+    </section>
+
+    <!-- 5. Note sur le fallback -->
+    <section id="fallback" class="content-section">
+      <h2>🛡️ 5. Note sur le Fallback & Stratégies de Repli</h2>
+      <p>
+        Conseils d'architecture pour une transition sans casse :
+      </p>
+
+      <ul class="fallback-steps">
+        <li>
+          <strong>Règle d'or de priorité non encapsulée :</strong><br>
+          Tout CSS écrit en dehors d'une règle <code>@layer</code> possède une priorité supérieure à n'importe quelle couche ordonnée. Si un navigateur ignore <code>@layer</code>, il appliquera simplement l'ordre classique basé sur la spécificité des sélecteurs.
+        </li>
+
+        <li>
+          <strong>Organisation des imports :</strong><br>
+          Enfermez les feuilles de style de bibliothèques tierces dans une couche de base dès l'import :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-prop">@import</span> <span class="hl-val">"vendor-library.css" layer(vendor)</span><span class="hl-punct">;</span></code></pre>
+          </div>
+          Cela garantit que votre propre code de composant prendra toujours le dessus sans conflit de sélecteurs.
+        </li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer style="text-align: center; padding: 2rem; color: var(--text-dim); font-size: 0.85rem; border-top: 1px solid var(--border-color); background: var(--bg-surface); margin-top: 4rem;">
+    <p>© 2026 — Fiches Techniques CSS • Développé en HTML / CSS / JS Vanilla</p>
+  </footer>
+
+</body>
+</html>

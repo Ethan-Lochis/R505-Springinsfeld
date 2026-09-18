@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Anchor Positioning — Ancrage d'éléments en CSS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Barre de navigation supérieure -->
+  <header class="top-bar">
+    <a href="../index.html" class="back-link">
+      <span>←</span> Retour au sommaire
+    </a>
+    <ul class="nav-links">
+      <li><a href="#explication">Explication</a></li>
+      <li><a href="#syntaxe">Syntaxe</a></li>
+      <li><a href="#demo">Démo Live</a></li>
+      <li><a href="#compatibilite">Compatibilité</a></li>
+      <li><a href="#fallback">Fallback</a></li>
+    </ul>
+  </header>
+
+  <div class="container">
+
+    <!-- En-tête de la fiche -->
+    <div class="hero-header">
+      <div class="meta-badges">
+        <span class="badge badge-tag">⚓ CSS Anchor Positioning Module</span>
+        <span class="badge badge-date">📅 Introduit en 2024 (Chrome 125+)</span>
+        <span class="badge badge-baseline">🚀 Baseline Newly Available</span>
+      </div>
+      <h1>CSS Anchor Positioning</h1>
+      <p class="baseline-text">
+        Ancrez et alignez des éléments flottants (infobulles, popovers, menus volants, badges) sur n'importe quel élément cible de la page sans une seule ligne de JavaScript.
+      </p>
+    </div>
+
+    <!-- 1. Explication en français (5-10 lignes) -->
+    <section id="explication" class="content-section">
+      <h2>📖 1. Explication</h2>
+      <p>
+        Pendant des décennies, positionner avec précision une infobulle (tooltip), un menu déroulant ou un menu contextuel à côté d'un élément déclencheur représentait un casse-tête majeur en CSS. Si l'élément parent utilisait un <code>overflow: hidden</code> ou <code>clip-path</code>, l'élément flottant était immédiatement tronqué, contraignant les développeurs à recourir à de volumineuses bibliothèques JavaScript (telles que Popper.js ou Floating UI) pour écouter le défilement et calculer les coordonnées avec <code>getBoundingClientRect()</code>.
+      </p>
+      <p>
+        La spécification <strong>CSS Anchor Positioning</strong> (introduite en 2024) révolutionne cela en permettant d'associer déclarativement un élément flottant (positionné en <code>absolute</code> ou <code>fixed</code>) à un élément d'ancrage nommé via la propriété <code>anchor-name</code>.
+      </p>
+      <p>
+        Grâce aux nouvelles propriétés <code>position-anchor</code>, <code>position-area</code> ou à la fonction <code>anchor()</code>, le navigateur calcule et recalcule en temps réel l'alignement directement au niveau du compositeur, avec des performances natives optimales à 60 ou 120 images par seconde.
+      </p>
+    </section>
+
+    <!-- 2. Bloc de code montrant la syntaxe -->
+    <section id="syntaxe" class="content-section">
+      <h2>💻 2. Syntaxe</h2>
+      <p>L'ancrage CSS repose sur la définition d'un nom d'ancre (variable débutant par deux tirets <code>--</code>) puis sur son rattachement :</p>
+
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span>CSS</span>
+          <span>anchor-positioning-syntax.css</span>
+        </div>
+        <pre><code><span class="hl-comment">/* 1. Déclarer l'élément cible comme point d'ancrage */</span>
+<span class="hl-selector">.btn-trigger</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">anchor-name</span><span class="hl-punct">:</span> <span class="hl-val">--btn-anchor</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 2. Méthode moderne simplifiée : position-area */</span>
+<span class="hl-selector">.tooltip</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">position</span><span class="hl-punct">:</span> <span class="hl-val">absolute</span><span class="hl-punct">;</span>
+  <span class="hl-prop">position-anchor</span><span class="hl-punct">:</span> <span class="hl-val">--btn-anchor</span><span class="hl-punct">;</span>
+  <span class="hl-prop">position-area</span><span class="hl-punct">:</span> <span class="hl-val">top center</span><span class="hl-punct">;</span> <span class="hl-comment">/* Positionne au-dessus et centré */</span>
+  <span class="hl-prop">margin-bottom</span><span class="hl-punct">:</span> <span class="hl-val">8px</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 3. Méthode granulaire avec la fonction anchor() */</span>
+<span class="hl-selector">.custom-badge</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">position</span><span class="hl-punct">:</span> <span class="hl-val">fixed</span><span class="hl-punct">;</span>
+  <span class="hl-prop">top</span><span class="hl-punct">:</span> <span class="hl-val">anchor(--btn-anchor bottom)</span><span class="hl-punct">;</span>
+  <span class="hl-prop">left</span><span class="hl-punct">:</span> <span class="hl-val">anchor(--btn-anchor center)</span><span class="hl-punct">;</span>
+  <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">translateX(-50%)</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 4. Gestion intelligente du débordement d'écran (Flip) */</span>
+<span class="hl-selector">.dropdown-menu</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">position</span><span class="hl-punct">:</span> <span class="hl-val">absolute</span><span class="hl-punct">;</span>
+  <span class="hl-prop">position-anchor</span><span class="hl-punct">:</span> <span class="hl-val">--btn-anchor</span><span class="hl-punct">;</span>
+  <span class="hl-prop">position-area</span><span class="hl-punct">:</span> <span class="hl-val">bottom span-all</span><span class="hl-punct">;</span>
+  <span class="hl-prop">position-try-fallbacks</span><span class="hl-punct">:</span> <span class="hl-val">flip-block, flip-inline</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span></code></pre>
+      </div>
+    </section>
+
+    <!-- 3. Démo live interactive -->
+    <section id="demo" class="content-section">
+      <h2>⚡ 3. Démo Live Interactive</h2>
+      <p>
+        Sélectionnez différentes zones d'ancrage avec les boutons ci-dessous pour voir l'infobulle se repositionner instantanément autour de l'élément cible grâce à <code>position-area</code> :
+      </p>
+
+      <div class="demo-box">
+        <div class="demo-instruction">
+          <span>🎯</span> Cliquez sur les positions ou déplacez l'ancre pour tester l'ancrage CSS en temps réel !
+        </div>
+
+        <div class="anchor-stage" id="anchorStage">
+          <!-- Élément cible (Ancre) -->
+          <button type="button" class="anchor-target" id="anchorBtn">
+            <span>⚓</span> Élément Cible (Ancre)
+          </button>
+
+          <!-- Élément ancré (Tooltip) -->
+          <div class="anchored-tooltip" id="anchoredTooltip">
+            <div class="tooltip-title">
+              <span>✨</span> Infobulle Ancrée
+            </div>
+            <span>Positionnée via CSS Anchor Positioning</span>
+          </div>
+        </div>
+
+        <!-- Panneau de contrôles -->
+        <div class="demo-controls-panel">
+          <div class="controls-row">
+            <strong>Choisir la valeur de <code>position-area</code> :</strong>
+            <div class="stage-move-buttons">
+              <button class="move-btn" id="moveLeftBtn">◀ Déplacer l'ancre</button>
+              <button class="move-btn" id="centerBtn">Centrer</button>
+              <button class="move-btn" id="moveRightBtn">Déplacer l'ancre ▶</button>
+            </div>
+          </div>
+
+          <div class="position-buttons-grid">
+            <button class="pos-btn active" data-pos="top center">top center</button>
+            <button class="pos-btn" data-pos="top right">top right</button>
+            <button class="pos-btn" data-pos="right center">right center</button>
+            <button class="pos-btn" data-pos="bottom right">bottom right</button>
+            <button class="pos-btn" data-pos="bottom center">bottom center</button>
+            <button class="pos-btn" data-pos="bottom left">bottom left</button>
+            <button class="pos-btn" data-pos="left center">left center</button>
+            <button class="pos-btn" data-pos="top left">top left</button>
+          </div>
+
+          <div class="current-css-preview">
+            <span id="cssCodeOutput">position-area: top center;</span>
+            <span style="font-size: 0.75rem; color: #94a3b8;" id="supportIndicator">Détection support navigateur...</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Tableau de compatibilité navigateurs -->
+    <section id="compatibilite" class="content-section">
+      <h2>🌍 4. Compatibilité Navigateurs</h2>
+      <p>
+        L'Anchor Positioning fait partie des nouveautés majeures du web 2024. Voici l'état du support actuel sur les principaux moteurs de rendu :
+      </p>
+
+      <div class="table-responsive">
+        <table class="compat-table">
+          <thead>
+            <tr>
+              <th>Navigateur</th>
+              <th>Version de support</th>
+              <th>État</th>
+              <th>Propriétés couvertes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌐</span> Google Chrome
+                </div>
+              </td>
+              <td><strong>125+</strong> (Mai 2024)</td>
+              <td><span class="status-badge status-supported">✓ Support Natif</span></td>
+              <td>anchor-name, position-anchor, position-area, anchor(), position-try</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌊</span> Microsoft Edge
+                </div>
+              </td>
+              <td><strong>125+</strong> (Mai 2024)</td>
+              <td><span class="status-badge status-supported">✓ Support Natif</span></td>
+              <td>Moteur Chromium complet</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🧭</span> Apple Safari
+                </div>
+              </td>
+              <td><strong>Technology Preview</strong></td>
+              <td><span class="status-badge status-preview">⚡ En cours (TP)</span></td>
+              <td>Implémentation WebKit active (support imminent)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🦊</span> Mozilla Firefox
+                </div>
+              </td>
+              <td><strong>Sous flag</strong> (Nightly)</td>
+              <td><span class="status-badge status-flag">🧪 Expérimental</span></td>
+              <td>Disponible via <code>layout.css.anchor-positioning.enabled</code></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">⭕</span> Opera
+                </div>
+              </td>
+              <td><strong>111+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support Natif</span></td>
+              <td>Chromium 125+</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-title">💡 Baseline 2024 & Évolution rapide</div>
+        <p style="font-size: 0.95rem; margin: 0;">
+          Porté par le groupe de travail CSS du W3C et Google Chrome, l'Anchor Positioning est déjà déployé auprès de plus de 70% des utilisateurs de bureau mondiaux. Un polyfill officiel léger développé par OddBird permet de combler l'écart sur Safari et Firefox dès aujourd'hui.
+        </p>
+      </div>
+    </section>
+
+    <!-- 5. Note sur le fallback -->
+    <section id="fallback" class="content-section">
+      <h2>🛡️ 5. Note sur le Fallback & Stratégies de Repli</h2>
+      <p>
+        Comment intégrer sereinement CSS Anchor Positioning dans un projet tout en garantissant une expérience irréprochable sur les navigateurs plus anciens ?
+      </p>
+
+      <ul class="fallback-steps">
+        <li>
+          <strong>1. Détection des fonctionnalités avec <code>@supports</code> :</strong><br>
+          Conditionnez l'ancrage CSS moderne tout en fournissant un positionnement traditionnel (position relative/absolute basique) pour les anciens navigateurs :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-comment">/* Positionnement standard de repli */</span>
+<span class="hl-selector">.tooltip</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">position</span><span class="hl-punct">:</span> <span class="hl-val">absolute</span><span class="hl-punct">;</span>
+  <span class="hl-prop">top</span><span class="hl-punct">:</span> <span class="hl-val">100%</span><span class="hl-punct">;</span>
+  <span class="hl-prop">left</span><span class="hl-punct">:</span> <span class="hl-val">50%</span><span class="hl-punct">;</span>
+  <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">translateX(-50%)</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* Amélioration progressive avec Anchor Positioning */</span>
+<span class="hl-selector">@supports (anchor-name: --test)</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">.tooltip</span> <span class="hl-punct">{</span>
+    <span class="hl-prop">position-anchor</span><span class="hl-punct">:</span> <span class="hl-val">--btn-anchor</span><span class="hl-punct">;</span>
+    <span class="hl-prop">position-area</span><span class="hl-punct">:</span> <span class="hl-val">top center</span><span class="hl-punct">;</span>
+    <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">none</span><span class="hl-punct">;</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+
+        <li>
+          <strong>2. Le Polyfill officiel CSS Anchor Positioning :</strong><br>
+          Pour supporter Safari et Firefox de façon transparente sans modifier une seule ligne de votre CSS, vous pouvez inclure le polyfill certifié :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-comment">&lt;!-- Polyfill officiel OddBird via CDN --&gt;</span>
+<span class="hl-selector">&lt;script</span> <span class="hl-prop">type</span>=<span class="hl-val">"module"</span> <span class="hl-prop">src</span>=<span class="hl-val">"https://unpkg.com/@oddbird/css-anchor-positioning/dist/css-anchor-positioning-fn.js"</span><span class="hl-selector">&gt;&lt;/script&gt;</span></code></pre>
+          </div>
+        </li>
+
+        <li>
+          <strong>3. Fallback JavaScript conditionnel :</strong><br>
+          Si le navigateur ne supporte pas <code>CSS.supports('anchor-name', '--a')</code>, chargez dynamiquement Floating UI ou un positionnement JS pour les éléments critiques nécessitant un évitement des collisions d'écran.
+        </li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>© 2026 — Fiches Techniques CSS • Développé en HTML / CSS / JS Vanilla</p>
+  </footer>
+
+  <!-- Script interactif de la démo -->
+  <script>
+    const tooltip = document.getElementById('anchoredTooltip');
+    const anchorBtn = document.getElementById('anchorBtn');
+    const anchorStage = document.getElementById('anchorStage');
+    const posButtons = document.querySelectorAll('.pos-btn');
+    const cssCodeOutput = document.getElementById('cssCodeOutput');
+    const supportIndicator = document.getElementById('supportIndicator');
+
+    const moveLeftBtn = document.getElementById('moveLeftBtn');
+    const centerBtn = document.getElementById('centerBtn');
+    const moveRightBtn = document.getElementById('moveRightBtn');
+
+    // Détection du support natif de CSS Anchor Positioning
+    const isNativeAnchorSupported = ('anchorName' in document.documentElement.style) || 
+      (window.CSS && CSS.supports && CSS.supports('anchor-name', '--test'));
+
+    if (isNativeAnchorSupported) {
+      supportIndicator.textContent = '✓ Support natif actif dans votre navigateur';
+      supportIndicator.style.color = '#10b981';
+    } else {
+      supportIndicator.textContent = 'ℹ Repli visuel simulé (support natif Chromium 125+)';
+      supportIndicator.style.color = '#f59e0b';
+    }
+
+    let currentPos = 'top center';
+    let anchorOffset = 0;
+
+    function applyPosition(pos) {
+      currentPos = pos;
+      cssCodeOutput.textContent = `position-area: ${pos};`;
+
+      // Définir la propriété CSS native
+      tooltip.style.positionArea = pos;
+
+      // Polyfill visuel fluide pour les navigateurs n'ayant pas encore position-area actif
+      if (!isNativeAnchorSupported) {
+        updateSimulatedPosition(pos);
+      }
+    }
+
+    function updateSimulatedPosition(pos) {
+      const btnRect = anchorBtn.getBoundingClientRect();
+      const stageRect = anchorStage.getBoundingClientRect();
+      const tipRect = tooltip.getBoundingClientRect();
+
+      const relTop = btnRect.top - stageRect.top;
+      const relLeft = btnRect.left - stageRect.left;
+      const btnW = btnRect.width;
+      const btnH = btnRect.height;
+      const tipW = tipRect.width;
+      const tipH = tipRect.height;
+
+      const gap = 12;
+      let top = 0;
+      let left = 0;
+
+      switch(pos) {
+        case 'top center':
+          top = relTop - tipH - gap;
+          left = relLeft + (btnW / 2) - (tipW / 2);
+          break;
+        case 'top right':
+          top = relTop - tipH - gap;
+          left = relLeft + btnW - tipW;
+          break;
+        case 'right center':
+          top = relTop + (btnH / 2) - (tipH / 2);
+          left = relLeft + btnW + gap;
+          break;
+        case 'bottom right':
+          top = relTop + btnH + gap;
+          left = relLeft + btnW - tipW;
+          break;
+        case 'bottom center':
+          top = relTop + btnH + gap;
+          left = relLeft + (btnW / 2) - (tipW / 2);
+          break;
+        case 'bottom left':
+          top = relTop + btnH + gap;
+          left = relLeft;
+          break;
+        case 'left center':
+          top = relTop + (btnH / 2) - (tipH / 2);
+          left = relLeft - tipW - gap;
+          break;
+        case 'top left':
+          top = relTop - tipH - gap;
+          left = relLeft;
+          break;
+      }
+
+      tooltip.style.top = `${top}px`;
+      tooltip.style.left = `${left}px`;
+    }
+
+    posButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        posButtons.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        applyPosition(btn.dataset.pos);
+      });
+    });
+
+    // Déplacement de l'ancre pour démontrer l'adhérence
+    function setAnchorTranslate(x) {
+      anchorOffset = x;
+      anchorBtn.style.transform = `translateX(${anchorOffset}px)`;
+      if (!isNativeAnchorSupported) {
+        requestAnimationFrame(() => updateSimulatedPosition(currentPos));
+      }
+    }
+
+    moveLeftBtn.addEventListener('click', () => setAnchorTranslate(anchorOffset - 60));
+    centerBtn.addEventListener('click', () => setAnchorTranslate(0));
+    moveRightBtn.addEventListener('click', () => setAnchorTranslate(anchorOffset + 60));
+
+    // Initialisation
+    applyPosition('top center');
+    window.addEventListener('resize', () => {
+      if (!isNativeAnchorSupported) updateSimulatedPosition(currentPos);
+    });
+  </script>
+
+</body>
+
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS appearance — Stylisation des contrôles d'interface</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Barre de navigation supérieure -->
+  <header class="top-bar">
+    <a href="../index.html" class="back-link">
+      <span>←</span> Retour au sommaire
+    </a>
+    <ul class="nav-links">
+      <li><a href="#explication">Explication</a></li>
+      <li><a href="#syntaxe">Syntaxe</a></li>
+      <li><a href="#demo">Démo Live</a></li>
+      <li><a href="#compatibilite">Compatibilité</a></li>
+      <li><a href="#fallback">Fallback</a></li>
+    </ul>
+  </header>
+
+  <div class="container">
+
+    <!-- En-tête de la fiche -->
+    <div class="hero-header">
+      <div class="meta-badges">
+        <span class="badge badge-tag">Propriété CSS UI / Form Controls</span>
+        <span class="badge badge-date">📅 Standardisée CSS Basic UI Level 4</span>
+        <span class="badge badge-baseline">✓ Baseline Widely Available</span>
+      </div>
+      <h1>appearance</h1>
+      <p class="baseline-text">
+        Contrôle la restitution visuelle native des composants d'interface du système d'exploitation et permet de réinitialiser leur apparence pour les styliser librement.
+      </p>
+    </div>
+
+    <!-- 1. Explication en français (5-10 lignes) -->
+    <section id="explication" class="content-section">
+      <h2>📖 1. Explication</h2>
+      <p>
+        Par défaut, les navigateurs délèguent le rendu des éléments de formulaire (boutons, listes déroulantes <code>&lt;select&gt;</code>, cases à cocher <code>&lt;input type="checkbox"&gt;</code>, sliders <code>&lt;range&gt;</code>) au système d'exploitation sous-jacent (Windows, macOS, iOS, Android). Ce mécanisme historique crée d'importantes disparités visuelles selon la plateforme de l'utilisateur.
+      </p>
+      <p>
+        La propriété <code>appearance: none</code> ordonne au navigateur de supprimer complètement le thème natif de l'OS appliqué à l'élément. Elle transforme le contrôle en une boîte neutre que l'on peut alors façonner intégralement avec du CSS ordinaire (bordures, fonds, dégradés, icônes SVG, animations).
+      </p>
+      <p>
+        Longtemps fragmentée sous les préfixes vendeurs <code>-webkit-appearance</code> et <code>-moz-appearance</code>, la propriété standard <code>appearance: none</code> est aujourd'hui universellement reconnue et incontournable pour concevoir des Design Systems sur-mesure.
+      </p>
+    </section>
+
+    <!-- 2. Bloc de code montrant la syntaxe -->
+    <section id="syntaxe" class="content-section">
+      <h2>💻 2. Syntaxe</h2>
+      <p>La valeur reine est <code>none</code>, souvent accompagnée du préfixe <code>-webkit-</code> pour une compatibilité absolue :</p>
+
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span>CSS</span>
+          <span>appearance-styling.css</span>
+        </div>
+        <pre><code><span class="hl-comment">/* 1. Réinitialisation complète du look natif */</span>
+<span class="hl-selector">select,
+input[type="checkbox"],
+input[type="range"],
+button</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">appearance</span><span class="hl-punct">:</span> <span class="hl-val">none</span><span class="hl-punct">;</span>
+  <span class="hl-prop">-webkit-appearance</span><span class="hl-punct">:</span> <span class="hl-val">none</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 2. Exemple : création d'un interrupteur (toggle switch) sur une checkbox pure */</span>
+<span class="hl-selector">.toggle-switch</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">appearance</span><span class="hl-punct">:</span> <span class="hl-val">none</span><span class="hl-punct">;</span>
+  <span class="hl-prop">width</span><span class="hl-punct">:</span> <span class="hl-val">44px</span><span class="hl-punct">;</span>
+  <span class="hl-prop">height</span><span class="hl-punct">:</span> <span class="hl-val">24px</span><span class="hl-punct">;</span>
+  <span class="hl-prop">background</span><span class="hl-punct">:</span> <span class="hl-val">#cbd5e1</span><span class="hl-punct">;</span>
+  <span class="hl-prop">border-radius</span><span class="hl-punct">:</span> <span class="hl-val">9999px</span><span class="hl-punct">;</span>
+  <span class="hl-prop">position</span><span class="hl-punct">:</span> <span class="hl-val">relative</span><span class="hl-punct">;</span>
+  <span class="hl-prop">transition</span><span class="hl-punct">:</span> <span class="hl-val">background-color 0.2s ease</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-selector">.toggle-switch:checked</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">background-color</span><span class="hl-punct">:</span> <span class="hl-val">#4f46e5</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 3. Conservation du style natif standard */</span>
+<span class="hl-selector">.default-control</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">appearance</span><span class="hl-punct">:</span> <span class="hl-val">auto</span><span class="hl-punct">;</span> <span class="hl-comment">/* comportement natif par défaut de l'OS */</span>
+<span class="hl-punct">}</span></code></pre>
+      </div>
+    </section>
+
+    <!-- 3. Démo live interactive -->
+    <section id="demo" class="content-section">
+      <h2>⚡ 3. Démo Live Interactive : Natif vs Customisé</h2>
+      <p>
+        Comparez côte à côte les éléments utilisant le rendu natif de votre OS et les mêmes éléments désossés avec <code>appearance: none</code> puis habillés par CSS moderne :
+      </p>
+
+      <div class="demo-box">
+        <div class="demo-instruction">
+          <span>🎭</span> <strong>Comparatif direct :</strong> Interagissez avec les formulaires ci-dessous pour voir la différence entre les contrôles système bruts et des composants personnalisés ultra-modernes.
+        </div>
+
+        <div class="comparison-grid">
+
+          <!-- Colonne 1 : Éléments natifs (appearance: auto) -->
+          <div class="comparison-column">
+            <div class="comparison-header">
+              <div class="comparison-title">
+                <span>🖥️</span> Contrôles Système Natifs
+              </div>
+              <span class="comparison-badge badge-native">appearance: auto</span>
+            </div>
+
+            <div class="form-group">
+              <label for="native-select">Menu déroulant (&lt;select&gt;) :</label>
+              <select id="native-select">
+                <option>Option Système 1</option>
+                <option>Option Système 2</option>
+                <option>Option Système 3</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Case à cocher standard :</label>
+              <label class="native-checkbox-label">
+                <input type="checkbox" checked>
+                <span>Checkbox native de l'OS</span>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label for="native-range">Curseur de défilement (&lt;input type="range"&gt;) :</label>
+              <input type="range" id="native-range" min="0" max="100" value="40">
+            </div>
+
+            <div class="form-group">
+              <label for="native-search">Champ de recherche (&lt;input type="search"&gt;) :</label>
+              <input type="search" id="native-search" placeholder="Rechercher avec icône native...">
+            </div>
+          </div>
+
+          <!-- Colonne 2 : Éléments customisés (appearance: none) -->
+          <div class="comparison-column">
+            <div class="comparison-header">
+              <div class="comparison-title">
+                <span>🎨</span> Contrôles Stylisés Personnalisés
+              </div>
+              <span class="comparison-badge badge-custom">appearance: none</span>
+            </div>
+
+            <div class="form-group">
+              <label for="custom-select">Menu déroulant personnalisé :</label>
+              <select id="custom-select" class="custom-select">
+                <option>Option Design Indigo</option>
+                <option>Option Design Cyan</option>
+                <option>Option Design Émeraude</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>Interrupteur Switch (Checkbox CSS pure) :</label>
+              <label class="custom-checkbox-wrapper">
+                <input type="checkbox" class="custom-checkbox" checked>
+                <span style="font-size: 0.9rem; font-weight: 500;">Bascule interactive sur-mesure</span>
+              </label>
+            </div>
+
+            <div class="form-group">
+              <label for="custom-range">Curseur avec poignée stylisée :</label>
+              <input type="range" id="custom-range" class="custom-range" min="0" max="100" value="65">
+            </div>
+
+            <div class="form-group">
+              <label for="custom-search">Champ épuré (icônes natives masquées) :</label>
+              <input type="search" id="custom-search" class="custom-search" placeholder="Recherche sans fioritures OS...">
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. Tableau de compatibilité -->
+    <section id="compatibilite" class="content-section">
+      <h2>🌍 4. Tableau de Compatibilité</h2>
+      <p>
+        Support de la propriété <code>appearance</code> (standard et préfixée) selon Can I Use & MDN :
+      </p>
+
+      <div class="compat-table-wrapper">
+        <table class="compat-table">
+          <thead>
+            <tr>
+              <th>Navigateur</th>
+              <th>Version (appearance standard)</th>
+              <th>Statut</th>
+              <th>Préfixe historique</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌐</span> Google Chrome
+                </div>
+              </td>
+              <td><strong>84+</strong> (Standard) / 1+ (-webkit)</td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td><code>-webkit-appearance</code></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🧭</span> Safari (macOS & iOS)
+                </div>
+              </td>
+              <td><strong>15.4+</strong> (Standard) / 3+ (-webkit)</td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td><code>-webkit-appearance</code></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🦊</span> Mozilla Firefox
+                </div>
+              </td>
+              <td><strong>80+</strong> (Standard) / 1+ (-moz)</td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td><code>-moz-appearance</code></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌊</span> Microsoft Edge
+                </div>
+              </td>
+              <td><strong>84+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td><code>-webkit-appearance</code></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">⭕</span> Opera
+                </div>
+              </td>
+              <td><strong>70+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td><code>-webkit-appearance</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-title">💡 Statut Baseline Widely Available</div>
+        <p style="font-size: 0.95rem; margin: 0;">
+          La propriété <code>appearance: none</code> est présente dans tous les navigateurs modernes depuis des années. Pour couvrir d'anciens périphériques mobiles iOS/Android, conserver <code>-webkit-appearance: none;</code> dans vos règles est une bonne pratique recommandée.
+        </p>
+      </div>
+    </section>
+
+    <!-- 5. Note sur le fallback -->
+    <section id="fallback" class="content-section">
+      <h2>🛡️ 5. Note sur le Fallback & Accessibilité</h2>
+      <p>
+        Quand et comment sécuriser vos interfaces lors de l'utilisation de <code>appearance: none</code> ?
+      </p>
+
+      <ul class="fallback-steps">
+        <li>
+          <strong>Préserver impérativement les indicateurs de focus (<code>:focus-visible</code>) :</strong><br>
+          En désactivant le thème système, l'anneau de focus par défaut disparaît souvent. Vous devez impérativement définir un style <code>:focus-visible</code> (avec <code>outline</code> ou <code>box-shadow</code>) pour garantir l'accessibilité aux utilisateurs navigant au clavier.
+        </li>
+
+        <li>
+          <strong>Rétablir les indicateurs visuels obligatoires :</strong><br>
+          Sur un <code>&lt;select&gt;</code>, <code>appearance: none</code> retire la flèche native. Il faut donc toujours réinjecter une flèche personnalisée (par exemple via une image vectorielle SVG en arrière-plan avec <code>background-image</code>).
+        </li>
+
+        <li>
+          <strong>Compatibilité rétroactive avec préfixe vendeur :</strong><br>
+          Assurez une transition douce sur les anciens moteurs WebKit en doublant la propriété :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-selector">.my-control</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">-webkit-appearance</span><span class="hl-punct">:</span> <span class="hl-val">none</span><span class="hl-punct">;</span> <span class="hl-comment">/* Anciens iOS Safari & Chrome */</span>
+  <span class="hl-prop">appearance</span><span class="hl-punct">:</span> <span class="hl-val">none</span><span class="hl-punct">;</span>         <span class="hl-comment">/* Standard moderne */</span>
+<span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer style="text-align: center; padding: 2rem; color: var(--text-dim); font-size: 0.85rem; border-top: 1px solid var(--border-color); background: var(--bg-surface); margin-top: 4rem;">
+    <p>© 2026 — Fiches Techniques CSS • Développé en HTML / CSS / JS Vanilla</p>
+  </footer>
+
+</body>
+</html>

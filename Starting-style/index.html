@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS @starting-style — Transitions sur display: none</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Barre de navigation supérieure -->
+  <header class="top-bar">
+    <a href="../index.html" class="back-link">
+      <span>←</span> Retour au sommaire
+    </a>
+    <ul class="nav-links">
+      <li><a href="#explication">Explication</a></li>
+      <li><a href="#syntaxe">Syntaxe</a></li>
+      <li><a href="#demo">Démo Live</a></li>
+      <li><a href="#compatibilite">Compatibilité</a></li>
+      <li><a href="#fallback">Fallback</a></li>
+    </ul>
+  </header>
+
+  <div class="container">
+
+    <!-- En-tête de la fiche -->
+    <div class="hero-header">
+      <div class="meta-badges">
+        <span class="badge badge-tag">✨ CSS Transitions Level 2</span>
+        <span class="badge badge-date">📅 Introduit en 2023 – 2024</span>
+        <span class="badge badge-baseline">✓ Baseline 2024 Newly Available</span>
+      </div>
+      <h1>@starting-style</h1>
+      <p class="baseline-text">
+        Animez en toute fluidité l'entrée et la sortie d'éléments passant de <code>display: none</code> à visible, ainsi que les dialogues modaux et popovers natifs, sans timer JavaScript.
+      </p>
+    </div>
+
+    <!-- 1. Explication en français (5-10 lignes) -->
+    <section id="explication" class="content-section">
+      <h2>📖 1. Explication</h2>
+      <p>
+        Depuis la création des transitions CSS, un obstacle fondamental frustrait tous les développeurs : un élément qui passe de <code>display: none</code> à <code>display: block</code> (ou <code>flex</code>, <code>grid</code>) ne pouvait pas être animé à l'apparition. Dès que la propriété <code>display</code> changeait, le moteur de rendu appliquait instantanément l'état final, sans transition d'opacité ou de transformation.
+      </p>
+      <p>
+        Pour contourner ce problème, il fallait jongler avec des astuces JavaScript complexes : modifier la classe, forcer un recalcul de style (reflow) ou attendre la frame suivante avec un <code>setTimeout()</code> ou un <code>requestAnimationFrame()</code>.
+      </p>
+      <p>
+        La règle <code>@starting-style</code> change totalement la donne. Associée au mot-clé <code>allow-discrete</code> (qui permet d'inclure des propriétés discrètes comme <code>display</code> ou <code>overlay</code> dans les transitions), elle permet de déclarer l'état de départ au tout premier rendu. Les éléments apparaissent et disparaissent ainsi avec des animations douces et naturelles, directement en pur CSS.
+      </p>
+    </section>
+
+    <!-- 2. Bloc de code montrant la syntaxe -->
+    <section id="syntaxe" class="content-section">
+      <h2>💻 2. Syntaxe</h2>
+      <p>Voici la déclaration typique pour un panneau, un toast ou une modale :</p>
+
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span>CSS</span>
+          <span>starting-style-syntax.css</span>
+        </div>
+        <pre><code><span class="hl-comment">/* 1. L'élément dans son état normal affiché */</span>
+<span class="hl-selector">.toast</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">display</span><span class="hl-punct">:</span> <span class="hl-val">flex</span><span class="hl-punct">;</span>
+  <span class="hl-prop">opacity</span><span class="hl-punct">:</span> <span class="hl-val">1</span><span class="hl-punct">;</span>
+  <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">translateY(0) scale(1)</span><span class="hl-punct">;</span>
+
+  <span class="hl-comment">/* Autoriser les transitions sur les propriétés discrètes (display) */</span>
+  <span class="hl-prop">transition</span><span class="hl-punct">:</span> 
+    <span class="hl-val">opacity 0.4s ease</span><span class="hl-punct">,</span>
+    <span class="hl-val">transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)</span><span class="hl-punct">,</span>
+    <span class="hl-val">display 0.4s allow-discrete</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 2. État initial lors de l'arrivée dans le DOM ou sortie de display:none */</span>
+<span class="hl-selector">@starting-style</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">.toast</span> <span class="hl-punct">{</span>
+    <span class="hl-prop">opacity</span><span class="hl-punct">:</span> <span class="hl-val">0</span><span class="hl-punct">;</span>
+    <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">translateY(20px) scale(0.95)</span><span class="hl-punct">;</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 3. État masqué (pour la transition de sortie) */</span>
+<span class="hl-selector">.toast.is-hidden</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">display</span><span class="hl-punct">:</span> <span class="hl-val">none</span><span class="hl-punct">;</span>
+  <span class="hl-prop">opacity</span><span class="hl-punct">:</span> <span class="hl-val">0</span><span class="hl-punct">;</span>
+  <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">translateY(20px) scale(0.95)</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span></code></pre>
+      </div>
+    </section>
+
+    <!-- 3. Démo live interactive -->
+    <section id="demo" class="content-section">
+      <h2>⚡ 3. Démo Live Interactive</h2>
+      <p>
+        Comparez l'effet visuel entre l'ancienne méthode et la nouvelle méthode CSS moderne :
+      </p>
+
+      <div class="demo-box">
+        <div class="demo-instruction">
+          <span>💡</span> Cliquez sur le bouton pour masquer ou afficher simultanément les deux composants et observez la fluidité !
+        </div>
+
+        <div style="display: flex; justify-content: center; margin-bottom: 1.5rem;">
+          <button type="button" class="btn-primary-action" id="togglePanelsBtn">
+            <span id="btnIcon">👁️</span> <span id="btnLabel">Masquer / Réafficher les éléments</span>
+          </button>
+        </div>
+
+        <!-- Comparaison côte à côte -->
+        <div class="comparison-grid">
+          <!-- Carte 1 : Ancienne méthode -->
+          <div class="comparison-card">
+            <div class="comparison-header">
+              <span style="color: #ef4444;">❌ Sans @starting-style (Ancien)</span>
+              <span style="font-size: 0.8rem; color: var(--text-dim);">Apparition brusque</span>
+            </div>
+            <div class="comparison-stage">
+              <div class="box-legacy" id="boxLegacy">
+                <span style="font-size: 1.5rem;">⚠️</span>
+                <div>
+                  <div style="font-weight: 700;">Pas de transition d'entrée</div>
+                  <div style="font-size: 0.8rem; opacity: 0.85;">Passe immédiatement de none à visible</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Carte 2 : Méthode moderne -->
+          <div class="comparison-card">
+            <div class="comparison-header">
+              <span style="color: var(--accent-primary);">✨ Avec @starting-style (Moderne)</span>
+              <span style="font-size: 0.8rem; color: #15803d; font-weight: 700;">Interpolation douce</span>
+            </div>
+            <div class="comparison-stage">
+              <div class="box-modern" id="boxModern">
+                <span style="font-size: 1.5rem;">🎉</span>
+                <div>
+                  <div style="font-weight: 700;">Transition d'entrée fluide !</div>
+                  <div style="font-size: 0.8rem; opacity: 0.85;">Animé depuis son @starting-style</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Démo 2 : Modale <dialog> native animée -->
+        <div class="dialog-demo-container">
+          <div style="font-weight: 700; color: var(--text-main);">
+            Bonus : Animation native d'une boîte de dialogue <code>&lt;dialog&gt;</code> et son <code>::backdrop</code>
+          </div>
+          <p style="font-size: 0.9rem; margin: 0; color: var(--text-muted);">
+            L'élément HTML5 <code>&lt;dialog&gt;</code> s'ouvre en couche supérieure (top-layer) et bénéficie directement de <code>@starting-style</code> pour son fondu et son zoom.
+          </p>
+          <button type="button" class="btn-secondary" id="openDialogBtn">
+            🚀 Ouvrir la modale &lt;dialog&gt; animée
+          </button>
+        </div>
+
+        <!-- Modale native -->
+        <dialog class="modern-dialog" id="demoDialog">
+          <div style="font-size: 2.2rem; margin-bottom: 0.75rem;">🌟</div>
+          <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 0.5rem;">Modale animée sans JS</h3>
+          <p style="font-size: 0.92rem; color: var(--text-muted); margin-bottom: 1.5rem;">
+            Grâce à <code>@starting-style</code> et <code>transition: display 0.4s allow-discrete, overlay 0.4s allow-discrete</code>, l'arrière-plan (backdrop) et la boîte s'animent gracieusement à l'ouverture ET à la fermeture !
+          </p>
+          <button type="button" class="btn-primary-action" id="closeDialogBtn">
+            Fermer la modale
+          </button>
+        </dialog>
+      </div>
+    </section>
+
+    <!-- 4. Tableau de compatibilité navigateurs -->
+    <section id="compatibilite" class="content-section">
+      <h2>🌍 4. Compatibilité Navigateurs</h2>
+      <p>
+        <code>@starting-style</code> et le mot-clé <code>allow-discrete</code> ont franchi le cap de la <strong>Baseline 2024</strong> et sont désormais pris en charge sur tous les navigateurs majeurs modernes :
+      </p>
+
+      <div class="table-responsive">
+        <table class="compat-table">
+          <thead>
+            <tr>
+              <th>Navigateur</th>
+              <th>Version de support</th>
+              <th>État</th>
+              <th>Fonctionnalités couvertes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌐</span> Google Chrome
+                </div>
+              </td>
+              <td><strong>117+</strong> (Sept. 2023)</td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>@starting-style, allow-discrete, overlay</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🧭</span> Apple Safari
+                </div>
+              </td>
+              <td><strong>17.5+</strong> (Mai 2024)</td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>WebKit complet sur iOS 17.5+ & macOS</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🦊</span> Mozilla Firefox
+                </div>
+              </td>
+              <td><strong>129+</strong> (Août 2024)</td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Support natif stable dans Gecko</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌊</span> Microsoft Edge
+                </div>
+              </td>
+              <td><strong>117+</strong> (Sept. 2023)</td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Moteur Chromium</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">⭕</span> Opera
+                </div>
+              </td>
+              <td><strong>103+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Moteur Chromium</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-title">🚀 Statut Baseline 2024 Newly Available</div>
+        <p style="font-size: 0.95rem; margin: 0;">
+          Avec l'intégration officielle dans Safari 17.5 et Firefox 129, cette fonctionnalité est désormais disponible pour plus de 90% des utilisateurs mondiaux. C'est l'un des progrès les plus attendus de la décennie en intégration web.
+        </p>
+      </div>
+    </section>
+
+    <!-- 5. Note sur le fallback -->
+    <section id="fallback" class="content-section">
+      <h2>🛡️ 5. Note sur le Fallback & Stratégies de Repli</h2>
+      <p>
+        Comment utiliser <code>@starting-style</code> en toute sécurité dans vos projets web actuels ?
+      </p>
+
+      <ul class="fallback-steps">
+        <li>
+          <strong>1. Dégradation gracieuse native (Zéro risque de régression) :</strong><br>
+          La beauté de <code>@starting-style</code> réside dans le fait qu'elle constitue une amélioration progressive naturelle. Un navigateur plus ancien qui ne comprend pas la règle ignore simplement le bloc <code>@starting-style</code> et la transition discrète : l'élément continuera de s'afficher ou de se masquer instantanément avec <code>display: none</code> / <code>display: block</code>, exactement comme il le faisait auparavant sans casser l'accessibilité.
+        </li>
+
+        <li>
+          <strong>2. Conditionnement via la règle <code>@supports</code> :</strong><br>
+          Si vous souhaitez appliquer une logique d'animation alternative sur les versions antérieures :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-selector">@supports (@starting-style {})</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">.toast</span> <span class="hl-punct">{</span>
+    <span class="hl-prop">transition</span><span class="hl-punct">:</span> <span class="hl-val">opacity 0.4s, transform 0.4s, display 0.4s allow-discrete</span><span class="hl-punct">;</span>
+  <span class="hl-punct">}</span>
+  
+  <span class="hl-selector">@starting-style</span> <span class="hl-punct">{</span>
+    <span class="hl-selector">.toast</span> <span class="hl-punct">{</span>
+      <span class="hl-prop">opacity</span><span class="hl-punct">:</span> <span class="hl-val">0</span><span class="hl-punct">;</span>
+      <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">translateY(10px)</span><span class="hl-punct">;</span>
+    <span class="hl-punct">}</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+
+        <li>
+          <strong>3. Respect impératif de <code>prefers-reduced-motion</code> :</strong><br>
+          Pour respecter le confort des personnes sensibles au mal des transports ou troubles vestibulaires, désactivez les transitions de déplacement lorsque la préférence utilisateur est active :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-selector">@media (prefers-reduced-motion: reduce)</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">.toast, .dialog</span> <span class="hl-punct">{</span>
+    <span class="hl-prop">transition</span><span class="hl-punct">:</span> <span class="hl-val">none !important</span><span class="hl-punct">;</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer>
+    <p>© 2026 — Fiches Techniques CSS • Développé en HTML / CSS / JS Vanilla</p>
+  </footer>
+
+  <!-- Script interactif de la démo -->
+  <script>
+    const togglePanelsBtn = document.getElementById('togglePanelsBtn');
+    const btnIcon = document.getElementById('btnIcon');
+    const btnLabel = document.getElementById('btnLabel');
+    const boxLegacy = document.getElementById('boxLegacy');
+    const boxModern = document.getElementById('boxModern');
+
+    const demoDialog = document.getElementById('demoDialog');
+    const openDialogBtn = document.getElementById('openDialogBtn');
+    const closeDialogBtn = document.getElementById('closeDialogBtn');
+
+    let isVisible = true;
+
+    togglePanelsBtn.addEventListener('click', () => {
+      isVisible = !isVisible;
+
+      if (isVisible) {
+        boxLegacy.classList.remove('is-closed');
+        boxModern.classList.remove('is-closed');
+        btnIcon.textContent = '👁️';
+        btnLabel.textContent = 'Masquer les éléments';
+      } else {
+        boxLegacy.classList.add('is-closed');
+        boxModern.classList.add('is-closed');
+        btnIcon.textContent = '✨';
+        btnLabel.textContent = 'Afficher les éléments (Observer l\'entrée)';
+      }
+    });
+
+    // Modale native <dialog>
+    openDialogBtn.addEventListener('click', () => {
+      demoDialog.showModal();
+    });
+
+    closeDialogBtn.addEventListener('click', () => {
+      demoDialog.close();
+    });
+
+    // Fermer en cliquant sur le backdrop
+    demoDialog.addEventListener('click', (e) => {
+      const rect = demoDialog.getBoundingClientRect();
+      const isInDialog = (
+        rect.top <= e.clientY &&
+        e.clientY <= rect.top + rect.height &&
+        rect.left <= e.clientX &&
+        e.clientX <= rect.left + rect.width
+      );
+      if (!isInDialog) {
+        demoDialog.close();
+      }
+    });
+  </script>
+
+</body>
+
+</html>

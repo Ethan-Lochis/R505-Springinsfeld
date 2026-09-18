@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS Scroll-driven Animations — animation-timeline</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Barre de progression scroll en haut de l'écran (Scroll-driven animation globale) -->
+  <div class="page-scroll-progress"></div>
+
+  <!-- Barre de navigation supérieure -->
+  <header class="top-bar">
+    <a href="../index.html" class="back-link">
+      <span>←</span> Retour au sommaire
+    </a>
+    <ul class="nav-links">
+      <li><a href="#explication">Explication</a></li>
+      <li><a href="#syntaxe">Syntaxe</a></li>
+      <li><a href="#demo">Démo Live</a></li>
+      <li><a href="#compatibilite">Compatibilité</a></li>
+      <li><a href="#fallback">Fallback</a></li>
+    </ul>
+  </header>
+
+  <div class="container">
+
+    <!-- En-tête de la fiche -->
+    <div class="hero-header">
+      <div class="meta-badges">
+        <span class="badge badge-tag">Spécification CSS Animations Level 2</span>
+        <span class="badge badge-date">📅 Introduit vers ~2023 – 2024</span>
+        <span class="badge badge-baseline">⚡ Baseline Newly Available</span>
+      </div>
+      <h1>Scroll-driven Animations</h1>
+      <p class="baseline-text">
+        Liez directement l'avancement d'une animation CSS à la progression du défilement ou à la visibilité d'un élément dans le viewport, sans une seule ligne de JavaScript.
+      </p>
+    </div>
+
+    <!-- 1. Explication en français (5-10 lignes) -->
+    <section id="explication" class="content-section">
+      <h2>📖 1. Explication</h2>
+      <p>
+        Jusqu'alors, synchroniser une animation avec le scroll (par exemple une barre de progression de lecture, des effets parallaxe ou des apparitions d'éléments au défilement) imposait d'écouter l'événement JavaScript <code>window.addEventListener('scroll', ...)</code>, puis de recalculer les positions avec des risques majeurs de saccades (jank) et de blocage du thread principal.
+      </p>
+      <p>
+        Les <strong>Scroll-driven Animations</strong> introduisent la propriété <code>animation-timeline</code> et les fonctions <code>scroll()</code> et <code>view()</code>. Au lieu d'avancer selon le temps écoulé en secondes, l'animation avance au prorata direct du défilement d'un conteneur ou du passage d'un élément devant l'écran.
+      </p>
+      <p>
+        Cette synchronisation s'effectue entièrement sur le thread du compositeur matériel du navigateur, offrant une fluidité absolue à 60/120 images par seconde tout en simplifiant drastiquement le code.
+      </p>
+    </section>
+
+    <!-- 2. Bloc de code montrant la syntaxe -->
+    <section id="syntaxe" class="content-section">
+      <h2>💻 2. Syntaxe</h2>
+      <p>Deux modes principaux sont à votre disposition : <code>scroll()</code> (selon le scroll du conteneur) et <code>view()</code> (selon la visibilité du sujet) :</p>
+
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span>CSS</span>
+          <span>scroll-driven-animations.css</span>
+        </div>
+        <pre><code><span class="hl-comment">/* --- Mode 1 : Barre de progression basée sur le scroll du document --- */</span>
+<span class="hl-selector">.reading-progress</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">animation</span><span class="hl-punct">:</span> <span class="hl-val">grow-progress auto linear</span><span class="hl-punct">;</span>
+  <span class="hl-prop">animation-timeline</span><span class="hl-punct">:</span> <span class="hl-val">scroll(root block)</span><span class="hl-punct">;</span> <span class="hl-comment">/* ou scroll() pour le scroll parent */</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-selector">@keyframes grow-progress</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">from</span> <span class="hl-punct">{</span> <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">scaleX(0)</span><span class="hl-punct">;</span> <span class="hl-punct">}</span>
+  <span class="hl-prop">to</span>   <span class="hl-punct">{</span> <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">scaleX(1)</span><span class="hl-punct">;</span> <span class="hl-punct">}</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* --- Mode 2 : Apparition fluide d'une carte au passage à l'écran --- */</span>
+<span class="hl-selector">.card</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">animation</span><span class="hl-punct">:</span> <span class="hl-val">reveal-item auto linear both</span><span class="hl-punct">;</span>
+  <span class="hl-prop">animation-timeline</span><span class="hl-punct">:</span> <span class="hl-val">view()</span><span class="hl-punct">;</span>
+  <span class="hl-prop">animation-range</span><span class="hl-punct">:</span> <span class="hl-val">entry 15% cover 35%</span><span class="hl-punct">;</span> <span class="hl-comment">/* plage d'intersection active */</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-selector">@keyframes reveal-item</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">from</span> <span class="hl-punct">{</span> <span class="hl-prop">opacity</span><span class="hl-punct">:</span> <span class="hl-val">0</span><span class="hl-punct">;</span> <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">translateY(40px) scale(0.95)</span><span class="hl-punct">;</span> <span class="hl-punct">}</span>
+  <span class="hl-prop">to</span>   <span class="hl-punct">{</span> <span class="hl-prop">opacity</span><span class="hl-punct">:</span> <span class="hl-val">1</span><span class="hl-punct">;</span> <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">translateY(0) scale(1)</span><span class="hl-punct">;</span> <span class="hl-punct">}</span>
+<span class="hl-punct">}</span></code></pre>
+      </div>
+    </section>
+
+    <!-- 3. Démo live interactive -->
+    <section id="demo" class="content-section">
+      <h2>⚡ 3. Démo Live Interactive</h2>
+      <p>
+        Explorez les deux cas d'usage majeurs en direct : le défilement dans un conteneur et l'apparition progressive au franchissement du viewport.
+      </p>
+
+      <div class="demo-box">
+
+        <!-- Démo 1 : Indicateur de lecture dans un conteneur -->
+        <div class="demo-instruction">
+          <span>📜</span> <strong>Démo 1 (Scroll Progress) :</strong> Faites défiler le texte dans le bloc ci-dessous. Observez la jauge colorée en haut progresser exactement selon la hauteur parcourue grâce à <code>scroll-timeline</code>.
+        </div>
+
+        <div class="demo-scroll-container">
+          <div class="demo-progress-bar"></div>
+          <div class="demo-scroll-content">
+            <p class="demo-scroll-paragraph">
+              <strong>1. Début de la lecture :</strong> La jauge au sommet est à 0%. Faites glisser la molette de souris ou la barre de défilement pour lancer la timeline.
+            </p>
+            <p class="demo-scroll-paragraph">
+              <strong>2. Milieu du défilement :</strong> Aucun script JS n'est exécuté. Le navigateur lie le pourcentage de déplacement vertical directement à la propriété CSS <code>transform: scaleX(...)</code>.
+            </p>
+            <p class="demo-scroll-paragraph">
+              <strong>3. Fluidité maximale :</strong> Les animations s'exécutent sur le thread de composition matériel (off-main-thread). Zéro ralentissement même si la page est occupée par d'autres calculs.
+            </p>
+            <p class="demo-scroll-paragraph">
+              <strong>4. Fin du conteneur :</strong> La jauge atteint 100%. La timeline s'achève naturellement à la fin de la portée du défilement.
+            </p>
+          </div>
+        </div>
+
+        <!-- Démo 2 : Animation d'apparition avec view() -->
+        <div style="margin-top: 2.5rem; padding-top: 2rem; border-top: 1px dashed var(--border-color);">
+          <div class="demo-instruction">
+            <span>👁️</span> <strong>Démo 2 (View Timeline) :</strong> Faites défiler la boîte ci-dessous. Les cartes s'animent individuellement (opacité et échelle) dès qu'elles entrent dans la zone visible avec <code>view()</code> et <code>animation-range</code>.
+          </div>
+
+          <div class="demo-view-container">
+            <div class="view-card">
+              <div class="view-icon">🚀</div>
+              <div class="view-text">
+                <h4>Composant 1 — Chargement initial</h4>
+                <p>Déjà visible dès le haut de la liste, opacité à 100%.</p>
+              </div>
+            </div>
+
+            <div class="view-card">
+              <div class="view-icon">⚡</div>
+              <div class="view-text">
+                <h4>Composant 2 — Entrée dynamique</h4>
+                <p>Faites défiler vers le bas pour observer son zoom et fondu enchaîné.</p>
+              </div>
+            </div>
+
+            <div class="view-card">
+              <div class="view-icon">💎</div>
+              <div class="view-text">
+                <h4>Composant 3 — Zéro JavaScript</h4>
+                <p>Remplace avantageusement les observateurs manuels comme IntersectionObserver.</p>
+              </div>
+            </div>
+
+            <div class="view-card">
+              <div class="view-icon">🎉</div>
+              <div class="view-text">
+                <h4>Composant 4 — Atteint la destination</h4>
+                <p>L'animation se stabilise dès que l'élément est confortablement dans le cadre.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="support-warning">
+          ⚠️ <strong>Information compatibilité :</strong> Votre navigateur actuel ne supporte pas encore nativement <code>animation-timeline</code>. Les effets s'affichent dans leur état finalisé de repli.
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. Tableau de compatibilité -->
+    <section id="compatibilite" class="content-section">
+      <h2>🌍 4. Tableau de Compatibilité</h2>
+      <p>
+        Support de la spécification Scroll-driven Animations (CSS Animations Level 2) selon Can I Use & MDN :
+      </p>
+
+      <div class="compat-table-wrapper">
+        <table class="compat-table">
+          <thead>
+            <tr>
+              <th>Navigateur</th>
+              <th>Version minimale</th>
+              <th>Statut</th>
+              <th>Prise en charge</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌐</span> Google Chrome
+                </div>
+              </td>
+              <td><strong>115+</strong> (Juil. 2023)</td>
+              <td><span class="status-badge status-supported">✓ Support natif complet</span></td>
+              <td><code>scroll()</code> & <code>view()</code></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌊</span> Microsoft Edge
+                </div>
+              </td>
+              <td><strong>115+</strong> (Juil. 2023)</td>
+              <td><span class="status-badge status-supported">✓ Support natif complet</span></td>
+              <td><code>scroll()</code> & <code>view()</code></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">⭕</span> Opera
+                </div>
+              </td>
+              <td><strong>101+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support natif complet</span></td>
+              <td>Chromium engine</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🧭</span> Safari (macOS / iOS)
+                </div>
+              </td>
+              <td><strong>Technology Preview</strong></td>
+              <td><span class="status-badge status-partial">⏳ En cours d'implémentation</span></td>
+              <td>Activé via Feature Flags WebKit</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🦊</span> Mozilla Firefox
+                </div>
+              </td>
+              <td><strong>En développement</strong></td>
+              <td><span class="status-badge status-partial">⏳ En cours (Firefox Nightly)</span></td>
+              <td>Flag <code>layout.css.scroll-driven-animations.enabled</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-title">💡 Amélioration Progressive (Progressive Enhancement)</div>
+        <p style="font-size: 0.95rem; margin: 0;">
+          Scroll-driven Animations est une technologie d'enrichissement visuel idéale : sur les navigateurs qui ne la gèrent pas encore, l'interface reste 100% lisible et utilisable, sans aucune erreur de script.
+        </p>
+      </div>
+    </section>
+
+    <!-- 5. Note sur le fallback -->
+    <section id="fallback" class="content-section">
+      <h2>🛡️ 5. Note sur le Fallback & Stratégies de Repli</h2>
+      <p>
+        Comment intégrer sereinement les Scroll-driven Animations en production aujourd'hui ?
+      </p>
+
+      <ul class="fallback-steps">
+        <li>
+          <strong>Rendu par défaut fonctionnel sans animation :</strong><br>
+          Assurez-vous que vos éléments sont visibles et lisibles sans animation (par exemple <code>opacity: 1</code> par défaut). L'animation ne doit servir qu'à ajouter du dynamisme visuel.
+        </li>
+
+        <li>
+          <strong>Conditionnement via la règle <code>@supports</code> :</strong><br>
+          Encapsulez les propriétés spécifiques au scroll dans une règle d'analyse pour isoler les navigateurs compatibles :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-comment">/* Styles de base : visibles par tous */</span>
+<span class="hl-selector">.fade-card</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">opacity</span><span class="hl-punct">:</span> <span class="hl-val">1</span><span class="hl-punct">;</span>
+  <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">none</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* Amélioration Scroll-driven si supporté */</span>
+<span class="hl-selector">@supports (animation-timeline: view())</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">.fade-card</span> <span class="hl-punct">{</span>
+    <span class="hl-prop">animation</span><span class="hl-punct">:</span> <span class="hl-val">reveal-item auto linear both</span><span class="hl-punct">;</span>
+    <span class="hl-prop">animation-timeline</span><span class="hl-punct">:</span> <span class="hl-val">view()</span><span class="hl-punct">;</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+
+        <li>
+          <strong>Polyfill officiel du W3C / Chrome Labs :</strong><br>
+          Un polyfill JavaScript officiel (<code>scroll-timeline-polyfill</code>) est disponible pour émuler le comportement exact sur Firefox et Safari en attendant leur publication définitive dans les versions stables.
+        </li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer style="text-align: center; padding: 2rem; color: var(--text-dim); font-size: 0.85rem; border-top: 1px solid var(--border-color); background: var(--bg-surface); margin-top: 4rem;">
+    <p>© 2026 — Fiches Techniques CSS • Développé en HTML / CSS / JS Vanilla</p>
+  </footer>
+
+</body>
+</html>

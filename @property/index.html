@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS @property — CSS Houdini Custom Properties</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Barre de navigation supérieure -->
+    <header class="top-bar">
+        <a href="../index.html" class="back-link">
+            <span>←</span> Retour au sommaire
+        </a>
+        <ul class="nav-links">
+            <li><a href="#explication">Explication</a></li>
+            <li><a href="#syntaxe">Syntaxe</a></li>
+            <li><a href="#demo">Démo Live</a></li>
+            <li><a href="#compatibilite">Compatibilité</a></li>
+            <li><a href="#fallback">Fallback</a></li>
+        </ul>
+    </header>
+
+    <div class="container">
+
+        <!-- En-tête de la fiche -->
+        <div class="hero-header">
+            <div class="meta-badges">
+                <span class="badge badge-tag">CSS Houdini / @-rule</span>
+                <span class="badge badge-date">📅 Introduit vers 2020 (Chrome) – milieu 2024</span>
+                <span class="badge badge-baseline">✓ Baseline Widely Available</span>
+            </div>
+            <h1>@property</h1>
+            <p class="baseline-text">
+                Enregistre et type des variables CSS personnalisées afin de permettre leur interpolation fluide,
+                validation et valeur par défaut.
+            </p>
+        </div>
+
+        <!-- 1. Explication en français (5-10 lignes) -->
+        <section id="explication" class="content-section">
+            <h2>📖 1. Explication</h2>
+            <p>
+                Issue des spécifications CSS Houdini, la règle <code>@property</code> permet aux développeurs de définir
+                explicitement le type de données d'une variable CSS personnalisée (Custom Property).
+            </p>
+            <p>
+                Par défaut, les variables CSS classiques sont traitées comme de simples chaînes de caractères sans type.
+                Le navigateur est donc incapable de savoir comment les animer ou calculer des transitions entre deux
+                états (par exemple pour faire tourner l'angle d'un dégradé ou modifier en douceur une couleur dans un
+                gradient).
+            </p>
+            <p>
+                En déclarant un type précis (comme <code>&lt;color&gt;</code>, <code>&lt;angle&gt;</code>,
+                <code>&lt;length&gt;</code> ou <code>&lt;percentage&gt;</code>), une valeur initiale et un comportement
+                d'héritage, <code>@property</code> offre enfin la possibilité d'animer des dégradés et des valeurs
+                mathématiques fluides directement en CSS pur, sans JavaScript.
+            </p>
+        </section>
+
+        <!-- 2. Bloc de code montrant la syntaxe -->
+        <section id="syntaxe" class="content-section">
+            <h2>💻 2. Syntaxe</h2>
+            <p>La règle comporte trois descripteurs essentiels (<code>syntax</code>, <code>inherits</code>,
+                <code>initial-value</code>) :
+            </p>
+
+            <div class="code-wrapper">
+                <div class="code-header">
+                    <span>CSS</span>
+                    <span>property-syntax.css</span>
+                </div>
+                <pre><code><span class="hl-comment">/* 1. Déclaration formelle de la variable typée */</span>
+<span class="hl-selector">@property --gradient-angle</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">syntax</span><span class="hl-punct">:</span> <span class="hl-val">'&lt;angle&gt;'</span><span class="hl-punct">;</span>         <span class="hl-comment">/* type : angle (deg, rad, turn) */</span>
+  <span class="hl-prop">initial-value</span><span class="hl-punct">:</span> <span class="hl-val">0deg</span><span class="hl-punct">;</span>       <span class="hl-comment">/* valeur par défaut obligatoire */</span>
+  <span class="hl-prop">inherits</span><span class="hl-punct">:</span> <span class="hl-val">false</span><span class="hl-punct">;</span>           <span class="hl-comment">/* true ou false */</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 2. Utilisation dans une transition ou une animation CSS */</span>
+<span class="hl-selector">.card</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">background</span><span class="hl-punct">:</span> <span class="hl-val">linear-gradient(var(--gradient-angle), #4f46e5, #ec4899)</span><span class="hl-punct">;</span>
+  <span class="hl-prop">transition</span><span class="hl-punct">:</span> <span class="hl-val">--gradient-angle 0.5s ease</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-selector">.card:hover</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">--gradient-angle</span><span class="hl-punct">:</span> <span class="hl-val">180deg</span><span class="hl-punct">;</span> <span class="hl-comment">/* Le navigateur interpole l'angle de 0deg à 180deg ! */</span>
+<span class="hl-punct">}</span></code></pre>
+            </div>
+        </section>
+
+        <!-- 3. Démo live interactive -->
+        <section id="demo" class="content-section">
+            <h2>⚡ 3. Démo Live Interactive</h2>
+            <p>
+                Passez votre curseur ou touchez les éléments ci-dessous : les transitions de dégradés sont interpolées
+                en direct par le moteur CSS grâce aux propriétés typées.
+            </p>
+
+            <div class="demo-box">
+                <div class="demo-instruction">
+                    <strong>Testez:</strong> Survolez le bouton pour observer la rotation fluide de l'angle du
+                    gradient, ou survolez la jauge pour voir le pourcentage se remplir avec fluidité.
+                </div>
+
+                <div class="demos-grid">
+                    <!-- Démo 1 : Rotation fluide du dégradé -->
+                    <div class="demo-card">
+                        <h3>Animation d'angle de dégradé</h3>
+                        <p>Propriété typée <code>&lt;angle&gt;</code> interpolée à 180° au survol.</p>
+                        <button class="animated-gradient-btn">Survolez-moi ✦</button>
+                    </div>
+
+                    <!-- Démo 2 : Jauge conique interpolée -->
+                    <div class="demo-card">
+                        <h3>Jauge conique fluide</h3>
+                        <p>Propriété typée <code>&lt;percentage&gt;</code> animée de 25% à 90%.</p>
+                        <div class="radial-progress-circle">
+                            <span class="progress-inner-label">90%</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 4. Tableau de compatibilité -->
+        <section id="compatibilite" class="content-section">
+            <h2>🌍 4. Tableau de Compatibilité</h2>
+            <p>
+                Support de la règle <code>@property</code> selon Can I Use et MDN Browser Compatibility Data :
+            </p>
+
+            <div class="compat-table-wrapper">
+                <table class="compat-table">
+                    <thead>
+                        <tr>
+                            <th>Navigateur</th>
+                            <th>Version minimale</th>
+                            <th>Statut</th>
+                            <th>Date de support</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <div class="browser-col">
+                                    <span class="browser-icon">🌐</span> Google Chrome
+                                </div>
+                            </td>
+                            <td><strong>85+</strong></td>
+                            <td><span class="status-badge status-supported">✓ Support total</span></td>
+                            <td>Août 2020</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="browser-col">
+                                    <span class="browser-icon">🧭</span> Safari (macOS & iOS)
+                                </div>
+                            </td>
+                            <td><strong>16.4+</strong></td>
+                            <td><span class="status-badge status-supported">✓ Support total</span></td>
+                            <td>Mars 2023</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="browser-col">
+                                    <span class="browser-icon">🦊</span> Mozilla Firefox
+                                </div>
+                            </td>
+                            <td><strong>128+</strong></td>
+                            <td><span class="status-badge status-supported">✓ Support total</span></td>
+                            <td>Juillet 2024 (Baseline complétée)</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="browser-col">
+                                    <span class="browser-icon">🌊</span> Microsoft Edge
+                                </div>
+                            </td>
+                            <td><strong>85+</strong></td>
+                            <td><span class="status-badge status-supported">✓ Support total</span></td>
+                            <td>Août 2020</td>
+                        </tr>
+                        <tr>
+                            <td>
+                                <div class="browser-col">
+                                    <span class="browser-icon">⭕</span> Opera
+                                </div>
+                            </td>
+                            <td><strong>71+</strong></td>
+                            <td><span class="status-badge status-supported">✓ Support total</span></td>
+                            <td>Septembre 2020</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="alert-card">
+                <div class="alert-title">💡 Baseline Status</div>
+                <p style="font-size: 0.95rem; margin: 0;">
+                    Depuis l'intégration dans <strong>Firefox 128 (été 2024)</strong>, <code>@property</code> a
+                    officiellement rejoint <strong>Baseline Widely Available</strong>. Tous les principaux moteurs
+                    modernes (Blink, WebKit, Gecko) l'intègrent nativement.
+                </p>
+            </div>
+        </section>
+
+        <!-- 5. Note sur le fallback -->
+        <section id="fallback" class="content-section">
+            <h2>🛡️ 5. Note sur le Fallback & Stratégies de Repli</h2>
+            <p>
+                Que se passe-t-il sur les navigateurs qui ne reconnaissent pas la règle <code>@property</code> ?
+            </p>
+
+            <ul class="fallback-steps">
+                <li>
+                    <strong>Comportement silencieux par défaut :</strong><br>
+                    Si un navigateur ne comprend pas <code>@property</code>, la variable reste une variable CSS standard
+                    non typée. Le composant s'affichera correctement avec sa valeur initiale, mais la transition ne sera
+                    pas fluide (changement brusque à l'état final sans interpolation intermédiaire).
+                </li>
+
+                <li>
+                    <strong>Détection via <code>CSS.registerProperty</code> en JavaScript :</strong><br>
+                    Pour vérifier la prise en charge programmatique avant d'appliquer une animation gourmande :
+                    <div class="code-wrapper" style="margin-top: 0.5rem;">
+                        <pre><code><span class="hl-selector">if ('registerProperty' in CSS)</span> <span class="hl-punct">{</span>
+  <span class="hl-comment">// Prise en charge native confirmée</span>
+<span class="hl-punct">}</span> <span class="hl-selector">else</span> <span class="hl-punct">{</span>
+  <span class="hl-comment">// Solution de repli alternative (ex: transition de clip-path ou opacity)</span>
+<span class="hl-punct">}</span></code></pre>
+                    </div>
+                </li>
+
+                <li>
+                    <strong>Fournir une apparence alternative simple :</strong><br>
+                    Pour les boutons ou cartes à dégradé, prévoyez un arrière-plan uni ou une transition classique sur
+                    <code>opacity</code> ou <code>filter</code> en cas d'absence de typage.
+                </li>
+            </ul>
+        </section>
+
+    </div>
+
+    <footer
+        style="text-align: center; padding: 2rem; color: var(--text-dim); font-size: 0.85rem; border-top: 1px solid var(--border-color); background: var(--bg-surface); margin-top: 4rem;">
+        <p>© 2026 — Fiches Techniques CSS • Développé en HTML / CSS / JS Vanilla</p>
+    </footer>
+
+</body>
+
+</html>

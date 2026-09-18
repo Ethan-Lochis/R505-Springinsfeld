@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS :has() — Le Sélecteur Parent</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Barre de navigation supérieure -->
+  <header class="top-bar">
+    <a href="../index.html" class="back-link">
+      <span>←</span> Retour au sommaire
+    </a>
+    <ul class="nav-links">
+      <li><a href="#explication">Explication</a></li>
+      <li><a href="#syntaxe">Syntaxe</a></li>
+      <li><a href="#demo">Démo Live</a></li>
+      <li><a href="#compatibilite">Compatibilité</a></li>
+      <li><a href="#fallback">Fallback</a></li>
+    </ul>
+  </header>
+
+  <div class="container">
+
+    <!-- En-tête de la fiche -->
+    <div class="hero-header">
+      <div class="meta-badges">
+        <span class="badge badge-tag">Pseudo-classe fonctionnelle</span>
+        <span class="badge badge-date">📅 Introduit vers ~2022 – fin 2023</span>
+        <span class="badge badge-baseline">✓ Baseline Widely Available</span>
+      </div>
+      <h1>:has()</h1>
+      <p class="baseline-text">
+        La pseudo-classe fonctionnelle relationnelle CSS qui permet de cibler un élément parent en fonction de ce qu'il
+        contient.
+      </p>
+    </div>
+
+    <!-- 1. Explication en français (5-10 lignes) -->
+    <section id="explication" class="content-section">
+      <h2>📖 1. Explication</h2>
+      <p>
+        Historiquement attendue depuis les débuts de CSS, la pseudo-classe fonctionnelle <code>:has()</code> est souvent
+        surnommée « le sélecteur parent ». Elle permet de styliser un élément en vérifiant s'il contient un ou plusieurs
+        éléments spécifiques correspondant à une liste d'arguments, ou s'il est suivi par un élément frère précis.
+      </p>
+      <p>
+        Avant son apparition, cibler un parent selon l'état d'un de ses enfants (comme une case à cocher active, un
+        champ invalide ou la présence d'une image) nécessitait impérativement d'écrire du JavaScript ou de concevoir des
+        structures HTML complexes et rigides. Grâce à <code>:has()</code>, le code CSS devient purement déclaratif,
+        réactif au DOM et considérablement plus concis.
+      </p>
+      <p>
+        Elle accepte une liste de sélecteurs relatifs et s'applique avec d'autres combinateurs (descendant direct
+        <code>&gt;</code>, adjacent direct <code>+</code>, général <code>~</code>), ouvrant des possibilités autrefois
+        impensables sans script.
+      </p>
+    </section>
+
+    <!-- 2. Bloc de code montrant la syntaxe -->
+    <section id="syntaxe" class="content-section">
+      <h2>💻 2. Syntaxe</h2>
+      <p>Voici la structure de base et des cas d'usage typiques :</p>
+
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span>CSS</span>
+          <span>syntaxe.css</span>
+        </div>
+        <pre><code><span class="hl-comment">/* Syntaxe générale : cible l'élément s'il contient l'argument */</span>
+<span class="hl-selector">target:has(selector)</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">property</span><span class="hl-punct">:</span> <span class="hl-val">value</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* Exemple 1 : styliser une carte de produit si sa checkbox est cochée */</span>
+<span class="hl-selector">.card:has(input[type="checkbox"]:checked)</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">border-color</span><span class="hl-punct">:</span> <span class="hl-val">#6366f1</span><span class="hl-punct">;</span>
+  <span class="hl-prop">background</span><span class="hl-punct">:</span> <span class="hl-val">#1e1b4b</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* Exemple 2 : cibler un conteneur qui contient un badge de promotion */</span>
+<span class="hl-selector">.article:has(.badge-discount)</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">outline</span><span class="hl-punct">:</span> <span class="hl-val">2px solid #ef4444</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* Exemple 3 : styliser un formulaire lorsqu'un champ obligatoire est en erreur */</span>
+<span class="hl-selector">.form-group:has(input:focus:invalid)</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">border-color</span><span class="hl-punct">:</span> <span class="hl-val">#f87171</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span></code></pre>
+      </div>
+    </section>
+
+    <!-- 3. Démo live interactive -->
+    <section id="demo" class="content-section">
+      <h2>⚡ 3. Démo Live Interactive</h2>
+      <p>
+        Les exemples ci-dessous sont entièrement gérés en CSS avec <code>:has()</code>, sans aucune ligne de JavaScript
+        pour modifier les styles du parent !
+      </p>
+
+      <div class="demo-box">
+        <div class="demo-instruction">
+          <strong>Testez :</strong> Cochez les cases ci-dessous pour voir le conteneur parent changer d'apparence en
+          temps réel.
+        </div>
+
+        <div class="cards-demo-container">
+          <!-- Carte 1 -->
+          <label class="product-card" for="opt1">
+            <h3>Forfait Standard</h3>
+            <p>Offre pour les projets individuels et équipes légères.</p>
+            <div class="option-row">
+              <input type="checkbox" id="opt1">
+              <span>Sélectionner ce forfait</span>
+            </div>
+          </label>
+
+          <!-- Carte 2 (avec badge spécial) -->
+          <label class="product-card" for="opt2">
+            <span class="badge-discount">-30% Promo</span>
+            <h3>Forfait Pro</h3>
+            <p>La puissance maximale avec fonctionnalités collaboratives et support prioritaire.</p>
+            <div class="option-row">
+              <input type="checkbox" id="opt2" checked>
+              <span>Sélectionner ce forfait</span>
+            </div>
+          </label>
+
+          <!-- Carte 3 -->
+          <label class="product-card" for="opt3">
+            <h3>Forfait Entreprise</h3>
+            <p>Déploiement dédié, SLA personnalisé et sécurité renforcée.</p>
+            <div class="option-row">
+              <input type="checkbox" id="opt3">
+              <span>Sélectionner ce forfait</span>
+            </div>
+          </label>
+        </div>
+
+        <!-- Démo 2 : Formulaire réactif au parent -->
+        <div class="form-demo-wrapper">
+          <p style="margin-bottom: 0.75rem; font-weight: 600; color: #f1f5f9;">
+            Deuxième démo : Validation en direct d'un conteneur parent
+          </p>
+          <div class="demo-form-field">
+            <label for="demo-email">Votre adresse e-mail professionnelle :</label>
+            <input type="email" id="demo-email" placeholder="nom@domaine.com" required value="invalide-sans-arobase">
+            <div class="status-indicator">
+              <span>ℹ️</span> Le contour du conteneur parent réagit automatiquement à la validité de l'input enfant lors
+              du focus.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. Tableau de compatibilité -->
+    <section id="compatibilite" class="content-section">
+      <h2>🌍 4. Tableau de Compatibilité</h2>
+      <p>
+        Données basées sur les spécifications du W3C et les relevés de Can I Use / MDN Browser Compatibility Data :
+      </p>
+
+      <div class="compat-table-wrapper">
+        <table class="compat-table">
+          <thead>
+            <tr>
+              <th>Navigateur</th>
+              <th>Version minimale</th>
+              <th>Statut</th>
+              <th>Date de support</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌐</span> Google Chrome
+                </div>
+              </td>
+              <td><strong>105+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Août 2022</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🧭</span> Safari (macOS & iOS)
+                </div>
+              </td>
+              <td><strong>15.4+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Mars 2022 (Pionnier)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🦊</span> Mozilla Firefox
+                </div>
+              </td>
+              <td><strong>121+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Décembre 2023</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌊</span> Microsoft Edge
+                </div>
+              </td>
+              <td><strong>105+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Août 2022</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">⭕</span> Opera
+                </div>
+              </td>
+              <td><strong>91+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Septembre 2022</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-title">💡 Baseline Status</div>
+        <p style="font-size: 0.95rem; margin: 0;">
+          Depuis fin 2023 (avec l'arrivée de Firefox 121), le sélecteur <code>:has()</code> fait officiellement partie
+          de <strong>Baseline Widely Available</strong> avec une couverture mondiale supérieure à 93% des navigateurs en
+          ligne.
+        </p>
+      </div>
+    </section>
+
+    <!-- 5. Note sur le fallback -->
+    <section id="fallback" class="content-section">
+      <h2>🛡️ 5. Note sur le Fallback & Stratégies de Repli</h2>
+      <p>
+        Que se passe-t-il si un utilisateur navigue sur une ancienne version (ex: Firefox &lt; 121 ou vieux navigateurs
+        mobiles) ?
+      </p>
+
+      <ul class="fallback-steps">
+        <li>
+          <strong>Invalidation de la règle (règle par défaut) :</strong><br>
+          En CSS, si un navigateur rencontre un sélecteur qu'il ne comprend pas, l'intégralité du bloc de déclaration
+          est ignorée. Veillez donc à <em>ne pas grouper</em> <code>:has()</code> avec d'autres sélecteurs standards
+          sans précaution :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-comment">/* ⚠️ Mauvaise pratique : si :has n'est pas supporté, .active est ignoré aussi ! */</span>
+<span class="hl-selector">.card.is-active, .card:has(input:checked)</span> <span class="hl-punct">{</span> ... <span class="hl-punct">}</span>
+
+<span class="hl-comment">/* ✅ Bonne pratique : déclarer séparément ou utiliser :is() si besoin */</span>
+<span class="hl-selector">.card.is-active</span> <span class="hl-punct">{</span> ... <span class="hl-punct">}</span>
+<span class="hl-selector">.card:has(input:checked)</span> <span class="hl-punct">{</span> ... <span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+
+        <li>
+          <strong>Détection native via <code>@supports selector()</code> :</strong><br>
+          Vous pouvez conditionner vos styles avancés grâce à la directive <code>@supports selector(...)</code> :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-comment">/* Style de base / repli pour tout le monde */</span>
+<span class="hl-selector">.card</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">border</span><span class="hl-punct">:</span> <span class="hl-val">1px solid #ccc</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* Amélioration progressive pour les navigateurs compatibles */</span>
+<span class="hl-selector">@supports selector(:has(*))</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">.card:has(input:checked)</span> <span class="hl-punct">{</span>
+    <span class="hl-prop">border-color</span><span class="hl-punct">:</span> <span class="hl-val">#6366f1</span><span class="hl-punct">;</span>
+    <span class="hl-prop">box-shadow</span><span class="hl-punct">:</span> <span class="hl-val">0 0 15px rgba(99, 102, 241, 0.4)</span><span class="hl-punct">;</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+
+        <li>
+          <strong>Repli JavaScript (Graceful Degradation / Polyfill) :</strong><br>
+          Si la fonctionnalité est critique pour l'expérience utilisateur ou l'accessibilité sur des environnements
+          anciens, ajoutez un écouteur d'événements JavaScript (comme <code>change</code> ou <code>input</code>) qui
+          ajoute une classe CSS <code>.is-checked</code> sur le parent pour émuler le comportement :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-selector">if (!CSS.supports('selector(:has(*))'))</span> <span class="hl-punct">{</span>
+  <span class="hl-comment">// Ajout d'une classe de repli JS</span>
+  <span class="hl-selector">document.querySelectorAll</span><span class="hl-punct">(</span><span class="hl-val">'.product-card input'</span><span class="hl-punct">).</span><span class="hl-selector">forEach</span><span class="hl-punct">(</span><span class="hl-selector">input</span> <span class="hl-punct">=&gt;</span> <span class="hl-punct">{</span>
+    <span class="hl-selector">input.addEventListener</span><span class="hl-punct">(</span><span class="hl-val">'change'</span><span class="hl-punct">,</span> <span class="hl-punct">()</span> <span class="hl-punct">=&gt;</span> <span class="hl-punct">{</span>
+      <span class="hl-selector">input.closest</span><span class="hl-punct">(</span><span class="hl-val">'.product-card'</span><span class="hl-punct">).</span><span class="hl-selector">classList.toggle</span><span class="hl-punct">(</span><span class="hl-val">'is-selected'</span><span class="hl-punct">,</span> <span class="hl-selector">input.checked</span><span class="hl-punct">);</span>
+    <span class="hl-punct">});</span>
+  <span class="hl-punct">});</span>
+<span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer
+    style="text-align: center; padding: 2rem; color: #64748b; font-size: 0.85rem; border-top: 1px solid rgba(255, 255, 255, 0.05);">
+    <p>© 2026 — Fiches Techniques CSS • Développé en HTML / CSS / JS Vanilla</p>
+  </footer>
+
+</body>
+
+</html>

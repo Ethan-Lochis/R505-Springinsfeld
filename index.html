@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS Modern Features — Découverte & Documentation</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <header>
+        <div class="hero-tag">✨ Guide & Documentation CSS</div>
+        <h1>Fonctionnalités <span>CSS Modernes</span></h1>
+        <p class="subtitle">
+            Exploration approfondie des fonctionnalités CSS de pointe, avec fiches explicatives, démonstrations
+            interactives, compatibilité navigateurs et stratégies de repli (fallback).
+        </p>
+    </header>
+
+    <main>
+        <div class="section-title">Sommaire des fiches disponibles</div>
+
+        <div class="features-grid">
+            <!-- Fiche :has() -->
+            <a href="./has/index.html" class="feature-card">
+                <div class="card-top">
+                    <span class="date-badge">2022 – 2023</span>
+                    <span style="font-size: 1.25rem;">🪄</span>
+                </div>
+                <div class="feature-name">:has()</div>
+                <p class="feature-desc">
+                    Le fameux "sélecteur parent" permettant de styliser un élément en fonction de ses descendants ou de
+                    ses éléments frères adjacents.
+                </p>
+                <div class="card-footer">
+                    <span>Consulter la fiche détaillée</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <!-- Fiche @container -->
+            <a href="./@container/index.html" class="feature-card">
+                <div class="card-top">
+                    <span class="date-badge">2022 – 2023</span>
+                    <span style="font-size: 1.25rem;">📦</span>
+                </div>
+                <div class="feature-name">@container</div>
+                <p class="feature-desc">
+                    Les Container Queries permettent d'adapter le style d'un composant selon les dimensions ou le style
+                    de son conteneur parent.
+                </p>
+                <div class="card-footer">
+                    <span>Consulter la fiche détaillée</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <!-- Fiche @property -->
+            <a href="./@property/index.html" class="feature-card">
+                <div class="card-top">
+                    <span class="date-badge">2020 – 2024</span>
+                    <span style="font-size: 1.25rem;">🎨</span>
+                </div>
+                <div class="feature-name">@property</div>
+                <p class="feature-desc">
+                    Enregistre et type les variables CSS (CSS Houdini) pour animer et interpoler des dégradés et valeurs
+                    mathématiques.
+                </p>
+                <div class="card-footer">
+                    <span>Consulter la fiche détaillée</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <!-- Fiche Scroll-driven animations -->
+            <a href="./Scroll/index.html" class="feature-card">
+                <div class="card-top">
+                    <span class="date-badge">2023 – 2024</span>
+                    <span style="font-size: 1.25rem;">📜</span>
+                </div>
+                <div class="feature-name">Scroll-driven Animations</div>
+                <p class="feature-desc">
+                    Anime des éléments au rythme du défilement ou de leur visibilité dans le viewport sans JavaScript
+                    (<code>animation-timeline</code>, <code>scroll()</code>, <code>view()</code>).
+                </p>
+                <div class="card-footer">
+                    <span>Consulter la fiche détaillée</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <!-- Fiche appearance -->
+            <a href="./appearence/index.html" class="feature-card">
+                <div class="card-top">
+                    <span class="date-badge">Standard CSS</span>
+                    <span style="font-size: 1.25rem;">🎭</span>
+                </div>
+                <div class="feature-name">appearance</div>
+                <p class="feature-desc">
+                    Contrôle le rendu natif des contrôles d'interface du système d'exploitation pour créer des
+                    formulaires et widgets personnalisés.
+                </p>
+                <div class="card-footer">
+                    <span>Consulter la fiche détaillée</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+            <!-- Fiche color-mix() -->
+            <a href="./Color-mix/index.html" class="feature-card">
+                <div class="card-top">
+                    <span class="date-badge">2023</span>
+                    <span style="font-size: 1.25rem;">🧪</span>
+                </div>
+                <div class="feature-name">color-mix()</div>
+                <p class="feature-desc">
+                    Mélange deux couleurs dans un espace colorimétrique donné (srgb, oklch, hsl) avec des proportions personnalisées, directement en CSS.
+                </p>
+                <div class="card-footer">
+                    <span>Consulter la fiche détaillée</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <!-- Fiche @layer -->
+            <a href="./Layers/index.html" class="feature-card">
+                <div class="card-top">
+                    <span class="date-badge">2022</span>
+                    <span style="font-size: 1.25rem;">🍰</span>
+                </div>
+                <div class="feature-name">@layer</div>
+                <p class="feature-desc">
+                    Contrôle l'ordre de priorité de la cascade CSS sans surenchère de spécificité ni conflit avec les bibliothèques tierces.
+                </p>
+                <div class="card-footer">
+                    <span>Consulter la fiche détaillée</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <!-- Fiche sin() & cos() -->
+            <a href="./Sin-Cos/index.html" class="feature-card">
+                <div class="card-top">
+                    <span class="date-badge">2023</span>
+                    <span style="font-size: 1.25rem;">📐</span>
+                </div>
+                <div class="feature-name">sin() & cos()</div>
+                <p class="feature-desc">
+                    Fonctions trigonométriques pour calculer des coordonnées cartésiennes, positionner des éléments en cercle et animer des trajectoires sans JS.
+                </p>
+                <div class="card-footer">
+                    <span>Consulter la fiche détaillée</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <!-- Fiche Anchor Positioning -->
+            <a href="./Anchor-positioning/index.html" class="feature-card">
+                <div class="card-top">
+                    <span class="date-badge">2024</span>
+                    <span style="font-size: 1.25rem;">⚓</span>
+                </div>
+                <div class="feature-name">Anchor Positioning</div>
+                <p class="feature-desc">
+                    Ancrez et alignez des éléments flottants (tooltips, popovers, menus volants) à un élément cible sans aucun calcul JavaScript.
+                </p>
+                <div class="card-footer">
+                    <span>Consulter la fiche détaillée</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+
+            <!-- Fiche @starting-style -->
+            <a href="./Starting-style/index.html" class="feature-card">
+                <div class="card-top">
+                    <span class="date-badge">2023 – 2024</span>
+                    <span style="font-size: 1.25rem;">✨</span>
+                </div>
+                <div class="feature-name">@starting-style</div>
+                <p class="feature-desc">
+                    Animez enfin l'entrée et la sortie d'éléments passant de <code>display: none</code> à visible et stylisez les modales <code>&lt;dialog&gt;</code> en pur CSS.
+                </p>
+                <div class="card-footer">
+                    <span>Consulter la fiche détaillée</span>
+                    <span class="card-arrow">→</span>
+                </div>
+            </a>
+        </div>
+    </main>
+
+    <footer>
+        <p>© 2026 — Fiches Techniques CSS • Développé en HTML / CSS / JS Vanilla</p>
+    </footer>
+
+</body>
+
+</html>

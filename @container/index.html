@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS @container — Les Container Queries</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Barre de navigation supérieure -->
+  <header class="top-bar">
+    <a href="../index.html" class="back-link">
+      <span>←</span> Retour au sommaire
+    </a>
+    <ul class="nav-links">
+      <li><a href="#explication">Explication</a></li>
+      <li><a href="#syntaxe">Syntaxe</a></li>
+      <li><a href="#demo">Démo Live</a></li>
+      <li><a href="#compatibilite">Compatibilité</a></li>
+      <li><a href="#fallback">Fallback</a></li>
+    </ul>
+  </header>
+
+  <div class="container">
+    
+    <!-- En-tête de la fiche -->
+    <div class="hero-header">
+      <div class="meta-badges">
+        <span class="badge badge-tag">Règle At (@-rule)</span>
+        <span class="badge badge-date">📅 Introduit vers ~2022 – début 2023</span>
+        <span class="badge badge-baseline">✓ Baseline Widely Available (Taille)</span>
+      </div>
+      <h1>@container</h1>
+      <p class="baseline-text">
+        Adapte le style d'un composant en fonction des dimensions ou du style de son conteneur direct, et non plus de l'écran global.
+      </p>
+    </div>
+
+    <!-- 1. Explication en français (5-10 lignes) -->
+    <section id="explication" class="content-section">
+      <h2>📖 1. Explication</h2>
+      <p>
+        Pendant des années, le design responsive reposait uniquement sur les Media Queries (<code>@media</code>), qui interrogent les dimensions globales du viewport (fenêtre du navigateur). Cette approche posait un problème récurrent pour les architectures modulaires de composants : une même carte doit souvent s'afficher différemment selon qu'elle se trouve dans une barre latérale étroite (300px) ou au centre d'une page large (800px).
+      </p>
+      <p>
+        La règle <code>@container</code> (Container Queries) résout ce défi en permettant à un élément d'adapter son apparence directement à l'espace alloué par son conteneur parent (défini via <code>container-type</code>).
+      </p>
+      <p>
+        Les composants deviennent ainsi véritablement autonomes, portables et réutilisables n'importe où dans la mise en page sans dépendre de la largeur totale de l'écran.
+      </p>
+    </section>
+
+    <!-- 2. Bloc de code montrant la syntaxe -->
+    <section id="syntaxe" class="content-section">
+      <h2>💻 2. Syntaxe</h2>
+      <p>L'utilisation se fait en deux étapes indispensables :</p>
+      
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span>CSS</span>
+          <span>container-queries.css</span>
+        </div>
+        <pre><code><span class="hl-comment">/* Étape 1 : Définir le parent comme contexte de conteneur */</span>
+<span class="hl-selector">.card-container</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">container-type</span><span class="hl-punct">:</span> <span class="hl-val">inline-size</span><span class="hl-punct">;</span> <span class="hl-comment">/* surveille la largeur */</span>
+  <span class="hl-prop">container-name</span><span class="hl-punct">:</span> <span class="hl-val">sidebar-card</span><span class="hl-punct">;</span> <span class="hl-comment">/* optionnel mais recommandé */</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* Étape 2 : Appliquer les styles conditionnels selon le conteneur */</span>
+<span class="hl-selector">@container (min-width: 480px)</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">.card</span> <span class="hl-punct">{</span>
+    <span class="hl-prop">display</span><span class="hl-punct">:</span> <span class="hl-val">grid</span><span class="hl-punct">;</span>
+    <span class="hl-prop">grid-template-columns</span><span class="hl-punct">:</span> <span class="hl-val">150px 1fr</span><span class="hl-punct">;</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* Variante : Style Queries (requête sur une propriété ou variable) */</span>
+<span class="hl-selector">@container style(--theme: dark)</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">.card</span> <span class="hl-punct">{</span>
+    <span class="hl-prop">background-color</span><span class="hl-punct">:</span> <span class="hl-val">#1e1e1e</span><span class="hl-punct">;</span>
+    <span class="hl-prop">color</span><span class="hl-punct">:</span> <span class="hl-val">#ffffff</span><span class="hl-punct">;</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span></code></pre>
+      </div>
+    </section>
+
+    <!-- 3. Démo live interactive -->
+    <section id="demo" class="content-section">
+      <h2>⚡ 3. Démo Live Interactive</h2>
+      <p>
+        Testez les deux facettes des Container Queries ci-dessous directement dans votre navigateur :
+      </p>
+
+      <div class="demo-box">
+        <!-- Démo 1 : Size Queries avec poignée de redimensionnement -->
+        <div class="demo-instruction">
+          <span>↔️</span> <strong>Démo 1 (Size Queries) :</strong> Glissez la poignée en bas à droite du cadre ci-dessous pour étirer ou rétrécir la largeur. Observez la carte passer de disposition verticale à horizontale quand son conteneur dépasse <strong>480px</strong> !
+        </div>
+
+        <div class="resizable-container-wrapper">
+          <div class="resize-hint">
+            <span>📐</span> Conteneur redimensionnable (tire la poignée en bas à droite ↘)
+          </div>
+
+          <!-- Conteneur déclaré avec container-type: inline-size -->
+          <div class="cq-parent">
+            <article class="demo-cq-card">
+              <div class="card-thumb">📦</div>
+              <div class="card-content">
+                <span class="tag-state">Auto-adaptatif</span>
+                <h3>Composant Produit Autonome</h3>
+                <p>
+                  Ce composant change de disposition (colonne ➔ ligne) uniquement en fonction de la taille de sa boîte parente, indépendamment de la taille de votre écran.
+                </p>
+              </div>
+            </article>
+          </div>
+        </div>
+
+        <!-- Démo 2 : Style Queries -->
+        <div class="style-queries-wrapper">
+          <p style="font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">
+            Démo 2 (Style Queries) : Requête basée sur une variable de conteneur <code>@container style(--theme: dark)</code>
+          </p>
+          <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">
+            Les composants ci-dessous adoptent automatiquement les styles clairs ou sombres selon la variable CSS définie sur leur parent respectif.
+          </p>
+
+          <div class="theme-container-grid">
+            <!-- Parent Thème Clair -->
+            <div class="theme-wrapper" data-theme="light">
+              <article class="theme-card">
+                <h3>Conteneur Thème Clair</h3>
+                <p>--theme: light défini sur le parent.</p>
+                <button class="theme-btn">Action Clair</button>
+              </article>
+            </div>
+
+            <!-- Parent Thème Sombre -->
+            <div class="theme-wrapper" data-theme="dark">
+              <article class="theme-card">
+                <h3>Conteneur Thème Sombre</h3>
+                <p>--theme: dark défini sur le parent.</p>
+                <button class="theme-btn">Action Sombre</button>
+              </article>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. Tableau de compatibilité -->
+    <section id="compatibilite" class="content-section">
+      <h2>🌍 4. Tableau de Compatibilité</h2>
+      <p>
+        Support des Container Queries (Size Queries <code>inline-size</code> / <code>size</code>) selon Can I Use & MDN :
+      </p>
+
+      <div class="compat-table-wrapper">
+        <table class="compat-table">
+          <thead>
+            <tr>
+              <th>Navigateur</th>
+              <th>Version minimale (Taille)</th>
+              <th>Statut</th>
+              <th>Support Style Queries</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌐</span> Google Chrome
+                </div>
+              </td>
+              <td><strong>105+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Chrome 111+</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🧭</span> Safari (macOS & iOS)
+                </div>
+              </td>
+              <td><strong>16+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Safari 18+</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🦊</span> Mozilla Firefox
+                </div>
+              </td>
+              <td><strong>110+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>En cours (Firefox Nightly)</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌊</span> Microsoft Edge
+                </div>
+              </td>
+              <td><strong>105+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Edge 111+</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">⭕</span> Opera
+                </div>
+              </td>
+              <td><strong>91+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Opera 97+</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-title">💡 Baseline Status</div>
+        <p style="font-size: 0.95rem; margin: 0;">
+          Les requêtes de conteneur dimensionnelles (<strong>Size Queries</strong>) sont reconnues comme <strong>Baseline Widely Available</strong> (supportées à 90%+ mondialement depuis début 2023). Les <strong>Style Queries</strong> progressent rapidement sur Chromium et WebKit.
+        </p>
+      </div>
+    </section>
+
+    <!-- 5. Note sur le fallback -->
+    <section id="fallback" class="content-section">
+      <h2>🛡️ 5. Note sur le Fallback & Stratégies de Repli</h2>
+      <p>
+        Comment sécuriser vos interfaces pour les navigateurs non compatibles ?
+      </p>
+
+      <ul class="fallback-steps">
+        <li>
+          <strong>Approche Mobile-First par défaut :</strong><br>
+          Concevez toujours le composant dans sa version la plus compacte ou flexible par défaut (sans container queries). Les règles <code>@container</code> viennent enrichir la mise en page uniquement lorsque le navigateur les comprend.
+        </li>
+
+        <li>
+          <strong>Détection avec <code>@supports (container-type: inline-size)</code> :</strong><br>
+          Vous pouvez séparer vos styles ou appliquer des media queries classiques de repli si le support manque :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-comment">/* Repli Media Query standard si @container n'est pas supporté */</span>
+<span class="hl-selector">@media (min-width: 768px)</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">.card</span> <span class="hl-punct">{</span> <span class="hl-prop">flex-direction</span><span class="hl-punct">:</span> <span class="hl-val">row</span><span class="hl-punct">;</span> <span class="hl-punct">}</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* Amélioration avec les vraies dimensions de conteneur */</span>
+<span class="hl-selector">@supports (container-type: inline-size)</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">@container (min-width: 480px)</span> <span class="hl-punct">{</span>
+    <span class="hl-selector">.card</span> <span class="hl-punct">{</span> <span class="hl-prop">flex-direction</span><span class="hl-punct">:</span> <span class="hl-val">row</span><span class="hl-punct">;</span> <span class="hl-punct">}</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+
+        <li>
+          <strong>Polyfill officiel :</strong><br>
+          L'équipe Google Chrome Labs maintient un polyfill officiel léger (<code>container-query-polyfill</code>) qui analyse le DOM avec <code>ResizeObserver</code> et applique les classes appropriées si le navigateur ne gère pas nativement <code>@container</code>.
+        </li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer style="text-align: center; padding: 2rem; color: var(--text-dim); font-size: 0.85rem; border-top: 1px solid var(--border-color); background: var(--bg-surface); margin-top: 4rem;">
+    <p>© 2026 — Fiches Techniques CSS • Développé en HTML / CSS / JS Vanilla</p>
+  </footer>
+
+</body>
+</html>

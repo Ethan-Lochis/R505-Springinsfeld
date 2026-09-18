@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS sin() & cos() — Fonctions Trigonométriques</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Barre de navigation supérieure -->
+  <header class="top-bar">
+    <a href="../index.html" class="back-link">
+      <span>←</span> Retour au sommaire
+    </a>
+    <ul class="nav-links">
+      <li><a href="#explication">Explication</a></li>
+      <li><a href="#syntaxe">Syntaxe</a></li>
+      <li><a href="#demo">Démo Live</a></li>
+      <li><a href="#compatibilite">Compatibilité</a></li>
+      <li><a href="#fallback">Fallback</a></li>
+    </ul>
+  </header>
+
+  <div class="container">
+
+    <!-- En-tête de la fiche -->
+    <div class="hero-header">
+      <div class="meta-badges">
+        <span class="badge badge-tag">CSS Values & Units Module Level 4</span>
+        <span class="badge badge-date">📅 Introduit en 2023</span>
+        <span class="badge badge-baseline">✓ Baseline Widely Available</span>
+      </div>
+      <h1>sin() & cos()</h1>
+      <p class="baseline-text">
+        Effectuez de véritables calculs trigonométriques directement en CSS pour positionner des éléments en cercle, créer des orbites et des trajectoires ondulatoires sans JavaScript.
+      </p>
+    </div>
+
+    <!-- 1. Explication en français (5-10 lignes) -->
+    <section id="explication" class="content-section">
+      <h2>📖 1. Explication</h2>
+      <p>
+        Positionner des éléments selon une disposition circulaire ou orbitale (par exemple un menu radial, les repères d'une montre ou une animation en arc de cercle) imposait jusqu'ici de recourir à JavaScript avec <code>Math.sin()</code> et <code>Math.cos()</code>, ou d'utiliser des astuces CSS rigides à base de rotations superposées (<code>transform: rotate(...) translate(...) rotate(...)</code>).
+      </p>
+      <p>
+        Les fonctions mathématiques CSS <code>sin()</code> et <code>cos()</code> permettent de calculer directement les coordonnées cartésiennes d'un point sur le cercle trigonométrique à partir d'un angle (en <code>deg</code>, <code>rad</code> ou <code>turn</code>) et d'un rayon : <code>x = cos(angle) * r</code> et <code>y = sin(angle) * r</code>.
+      </p>
+      <p>
+        Couplées à <code>calc()</code> et aux variables CSS personnalisées, elles ouvrent la voie à des interfaces géométriques dynamiques, des menus radiaux réactifs et des animations harmoniques ultra-légères.
+      </p>
+    </section>
+
+    <!-- 2. Bloc de code montrant la syntaxe -->
+    <section id="syntaxe" class="content-section">
+      <h2>💻 2. Syntaxe</h2>
+      <p>La formule universelle pour placer un élément sur une orbite de rayon <code>R</code> selon un angle <code>θ</code> :</p>
+
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span>CSS</span>
+          <span>trigonometry.css</span>
+        </div>
+        <pre><code><span class="hl-selector">:root</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">--radius</span><span class="hl-punct">:</span> <span class="hl-val">120px</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* Positionnement sur un cercle par trigonométrie */</span>
+<span class="hl-selector">.orbit-item</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">--x</span><span class="hl-punct">:</span> <span class="hl-val">calc(cos(var(--angle)) * var(--radius))</span><span class="hl-punct">;</span>
+  <span class="hl-prop">--y</span><span class="hl-punct">:</span> <span class="hl-val">calc(sin(var(--angle)) * var(--radius))</span><span class="hl-punct">;</span>
+
+  <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">translate(var(--x), var(--y))</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* Répartition des enfants à des angles spécifiques */</span>
+<span class="hl-selector">.item-1</span> <span class="hl-punct">{</span> <span class="hl-prop">--angle</span><span class="hl-punct">:</span> <span class="hl-val">0deg</span><span class="hl-punct">;</span> <span class="hl-punct">}</span>
+<span class="hl-selector">.item-2</span> <span class="hl-punct">{</span> <span class="hl-prop">--angle</span><span class="hl-punct">:</span> <span class="hl-val">90deg</span><span class="hl-punct">;</span> <span class="hl-punct">}</span>
+<span class="hl-selector">.item-3</span> <span class="hl-punct">{</span> <span class="hl-prop">--angle</span><span class="hl-punct">:</span> <span class="hl-val">180deg</span><span class="hl-punct">;</span> <span class="hl-punct">}</span>
+<span class="hl-selector">.item-4</span> <span class="hl-punct">{</span> <span class="hl-prop">--angle</span><span class="hl-punct">:</span> <span class="hl-val">270deg</span><span class="hl-punct">;</span> <span class="hl-punct">}</span>
+
+<span class="hl-comment">/* Autres fonctions disponibles : tan(), asin(), acos(), atan(), atan2() */</span></code></pre>
+      </div>
+    </section>
+
+    <!-- 3. Démo live interactive -->
+    <section id="demo" class="content-section">
+      <h2>⚡ 3. Démo Live Interactive</h2>
+      <p>
+        Découvrez les deux applications visuelles majeures : une disposition circulaire parfaite et un graphique en onde sinusoïdale en pur CSS :
+      </p>
+
+      <div class="demo-box">
+
+        <!-- Démo 1 : Menu Orbital circulaire -->
+        <div class="demo-instruction">
+          <span>🪐</span> <strong>Démo 1 (Menu Radial Trigonométrique) :</strong> Les 6 icônes ci-dessous sont positionnées aux angles 0°, 60°, 120°, 180°, 240° et 300° uniquement grâce à <code>cos()</code> (axe X) et <code>sin()</code> (axe Y).
+        </div>
+
+        <div class="trig-demo-container">
+          <div class="orbital-stage">
+            <div class="orbital-center">☀️</div>
+
+            <div class="orbital-item item-1" title="0° (cos=1, sin=0)">🚀</div>
+            <div class="orbital-item item-2" title="60° (cos=0.5, sin=0.866)">⚡</div>
+            <div class="orbital-item item-3" title="120° (cos=-0.5, sin=0.866)">🎨</div>
+            <div class="orbital-item item-4" title="180° (cos=-1, sin=0)">💎</div>
+            <div class="orbital-item item-5" title="240° (cos=-0.5, sin=-0.866)">🔮</div>
+            <div class="orbital-item item-6" title="300° (cos=0.5, sin=-0.866)">🌍</div>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin: 0; text-align: center;">
+            Survolez les icônes pour observer leur mise à l'échelle douce sur leur propre vecteur trigonométrique.
+          </p>
+        </div>
+
+        <!-- Démo 2 : Onde sinusoïdale -->
+        <div style="margin-top: 2rem; padding-top: 2rem; border-top: 1px dashed var(--border-color);">
+          <div class="demo-instruction">
+            <span>🌊</span> <strong>Démo 2 (Onde harmonique) :</strong> La hauteur de chaque barre est directement calculée avec <code>height: calc(50px + sin(var(--phase)) * 30px)</code>, générant une vague naturelle.
+          </div>
+
+          <div class="wave-container">
+            <div class="wave-bar wb-1"></div>
+            <div class="wave-bar wb-2"></div>
+            <div class="wave-bar wb-3"></div>
+            <div class="wave-bar wb-4"></div>
+            <div class="wave-bar wb-5"></div>
+            <div class="wave-bar wb-6"></div>
+            <div class="wave-bar wb-7"></div>
+            <div class="wave-bar wb-8"></div>
+          </div>
+        </div>
+
+        <!-- Démo 3 : Carrés pointant vers le curseur via atan2() -->
+        <div class="mouse-tracker-wrapper">
+          <div class="demo-instruction" style="width: 100%;">
+            <span>🎯</span> <strong>Démo 3 (Suivi de curseur avec <code>atan2()</code>) :</strong> Déplacez votre souris ou votre doigt dans le cadre ci-dessous. Les carrés s'orientent en temps réel pour pointer précisément vers la position du curseur !
+          </div>
+
+          <div class="origin">
+            <div class="box"></div>
+            <div class="box"></div>
+            <div class="box"></div>
+          </div>
+          <p style="font-size: 0.85rem; color: var(--text-muted); margin-top: 0.75rem; text-align: center;">
+            💡 Avec <code>atan2(y, x)</code>, le navigateur calcule l'angle de rotation exact pour qu'un objet pointe vers une coordonnée arbitraire.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. Tableau de compatibilité -->
+    <section id="compatibilite" class="content-section">
+      <h2>🌍 4. Tableau de Compatibilité</h2>
+      <p>
+        Support des fonctions trigonométriques CSS (<code>sin()</code>, <code>cos()</code>, <code>tan()</code>, <code>atan2()</code>) selon Can I Use & MDN :
+      </p>
+
+      <div class="compat-table-wrapper">
+        <table class="compat-table">
+          <thead>
+            <tr>
+              <th>Navigateur</th>
+              <th>Version minimale</th>
+              <th>Statut</th>
+              <th>Fonctions incluses</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🧭</span> Safari (macOS & iOS)
+                </div>
+              </td>
+              <td><strong>15.4+</strong> (Mars 2022)</td>
+              <td><span class="status-badge status-supported">✓ Support complet</span></td>
+              <td>sin, cos, tan, asin, acos, atan, atan2</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🦊</span> Mozilla Firefox
+                </div>
+              </td>
+              <td><strong>108+</strong> (Déc. 2022)</td>
+              <td><span class="status-badge status-supported">✓ Support complet</span></td>
+              <td>Ensemble complet trigonométrique</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌐</span> Google Chrome
+                </div>
+              </td>
+              <td><strong>111+</strong> (Mars 2023)</td>
+              <td><span class="status-badge status-supported">✓ Support complet</span></td>
+              <td>Ensemble complet trigonométrique</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌊</span> Microsoft Edge
+                </div>
+              </td>
+              <td><strong>111+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support complet</span></td>
+              <td>Chromium engine</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">⭕</span> Opera
+                </div>
+              </td>
+              <td><strong>97+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support complet</span></td>
+              <td>Chromium engine</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-title">💡 Baseline 2023 Widely Available</div>
+        <p style="font-size: 0.95rem; margin: 0;">
+          Toutes les fonctions trigonométriques CSS font officiellement partie de la Baseline Web depuis le printemps 2023 et sont reconnues par tous les moteurs modernes.
+        </p>
+      </div>
+
+      <!-- Lien de référence vers l'article web.dev -->
+      <div class="reference-card">
+        <div>
+          <strong>📚 Article de référence & inspiration :</strong>
+          <div style="font-size: 0.85rem; color: var(--text-muted);">Article officiel Chrome for Developers sur les fonctions trigonométriques en CSS</div>
+        </div>
+        <a href="https://web.dev/articles/css-trig-functions?hl=fr" target="_blank" rel="noopener noreferrer">
+          <span>Consulter sur web.dev</span>
+          <span>↗</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- 5. Note sur le fallback -->
+    <section id="fallback" class="content-section">
+      <h2>🛡️ 5. Note sur le Fallback & Stratégies de Repli</h2>
+      <p>
+        Comment garantir la robustesse de vos animations mathématiques ?
+      </p>
+
+      <ul class="fallback-steps">
+        <li>
+          <strong>Stratégie historique avec rotations cumulées :</strong><br>
+          Pour les navigateurs plus anciens, le positionnement radial s'effectuait en faisant tourner l'élément, en le déplaçant sur l'axe X puis en annulant la rotation du texte :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-selector">.legacy-orbit</span> <span class="hl-punct">{</span>
+  <span class="hl-comment">/* Repli classique sans trigonométrie */</span>
+  <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">rotate(var(--angle)) translate(var(--radius)) rotate(calc(-1 * var(--angle)))</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+
+        <li>
+          <strong>Détection avec <code>@supports (transform: translate(cos(0deg), sin(0deg)))</code> :</strong><br>
+          Permet d'activer la syntaxe vectorielle pure uniquement si le moteur d'affichage supporte les fonctions trigonométriques :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-selector">@supports (top: calc(sin(1deg) * 1px))</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">.orbit-item</span> <span class="hl-punct">{</span>
+    <span class="hl-prop">transform</span><span class="hl-punct">:</span> <span class="hl-val">translate(calc(cos(var(--a)) * 100px), calc(sin(var(--a)) * 100px))</span><span class="hl-punct">;</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer style="text-align: center; padding: 2rem; color: var(--text-dim); font-size: 0.85rem; border-top: 1px solid var(--border-color); background: var(--bg-surface); margin-top: 4rem;">
+    <p>© 2026 — Fiches Techniques CSS • Développé en HTML / CSS / JS Vanilla</p>
+  </footer>
+
+  <!-- Script de suivi de la souris pour la démo atan2() -->
+  <script>
+    const origin = document.querySelector(".origin");
+    if (origin) {
+      origin.addEventListener("pointermove", (evt) => {
+        const rect = origin.getBoundingClientRect();
+        const x = evt.clientX - rect.left;
+        const y = evt.clientY - rect.top;
+
+        origin.style.setProperty("--mouse-x", Math.round(x));
+        origin.style.setProperty("--mouse-y", Math.round(y));
+      });
+    }
+  </script>
+
+</body>
+</html>

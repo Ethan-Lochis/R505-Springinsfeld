@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CSS color-mix() — Mélange de couleurs en CSS</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300..800;1,300..800&family=JetBrains+Mono:wght@400;500;700&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+  <!-- Barre de navigation supérieure -->
+  <header class="top-bar">
+    <a href="../index.html" class="back-link">
+      <span>←</span> Retour au sommaire
+    </a>
+    <ul class="nav-links">
+      <li><a href="#explication">Explication</a></li>
+      <li><a href="#syntaxe">Syntaxe</a></li>
+      <li><a href="#demo">Démo Live</a></li>
+      <li><a href="#compatibilite">Compatibilité</a></li>
+      <li><a href="#fallback">Fallback</a></li>
+    </ul>
+  </header>
+
+  <div class="container">
+
+    <!-- En-tête de la fiche -->
+    <div class="hero-header">
+      <div class="meta-badges">
+        <span class="badge badge-tag">CSS Color Module Level 4</span>
+        <span class="badge badge-date">📅 Introduit en ~2023</span>
+        <span class="badge badge-baseline">✓ Baseline Widely Available</span>
+      </div>
+      <h1>color-mix()</h1>
+      <p class="baseline-text">
+        Mélangez deux couleurs dans un espace colorimétrique spécifié (srgb, oklch, hsl) avec des ratios personnalisés sans préprocesseur ni script.
+      </p>
+    </div>
+
+    <!-- 1. Explication en français (5-10 lignes) -->
+    <section id="explication" class="content-section">
+      <h2>📖 1. Explication</h2>
+      <p>
+        Avant l'arrivée de <code>color-mix()</code>, générer des nuances dérivées (états hover, teintes éclaircies, ombrages ou modes semi-transparents) nécessitait soit de déclarer manuellement des dizaines de variables hexadécimales, soit de passer par des préprocesseurs tels que Sass (<code>lighten()</code>, <code>darken()</code>) ou des scripts JavaScript.
+      </p>
+      <p>
+        La fonction CSS native <code>color-mix()</code> permet d'effectuer des calculs et mélanges de couleurs dynamiques directement dans le navigateur. Elle accepte deux couleurs, leurs pourcentages respectifs et un espace d'interpolation (comme <code>in srgb</code>, <code>in hsl</code> ou le très moderne et uniforme <code>in oklch</code>).
+      </p>
+      <p>
+        Cette avancée simplifie considérablement la création de Design Systems et thèmes clair/sombre, en permettant de calculer toutes les nuances à partir d'une seule couleur primaire (ex: <code>color-mix(in srgb, var(--primary) 70%, white)</code>).
+      </p>
+    </section>
+
+    <!-- 2. Bloc de code montrant la syntaxe -->
+    <section id="syntaxe" class="content-section">
+      <h2>💻 2. Syntaxe</h2>
+      <p>La fonction s'articule autour de l'espace de couleur cible et des proportions :</p>
+
+      <div class="code-wrapper">
+        <div class="code-header">
+          <span>CSS</span>
+          <span>color-mix-examples.css</span>
+        </div>
+        <pre><code><span class="hl-comment">/* 1. Éclaircir une couleur primaire (70% primaire + 30% blanc) */</span>
+<span class="hl-selector">.card-light</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">background</span><span class="hl-punct">:</span> <span class="hl-val">color-mix(in srgb, var(--primary) 70%, white)</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 2. Assombrir une couleur (ajouter du noir) */</span>
+<span class="hl-selector">.card-border</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">border-color</span><span class="hl-punct">:</span> <span class="hl-val">color-mix(in srgb, var(--primary) 85%, black)</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 3. Rendre une couleur semi-transparente sans modifier son opacité générale */</span>
+<span class="hl-selector">.badge-transparent</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">background</span><span class="hl-punct">:</span> <span class="hl-val">color-mix(in srgb, var(--primary) 20%, transparent)</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span>
+
+<span class="hl-comment">/* 4. Utilisation de l'espace perceptuel moderne OKLCH (transition sans zone terne) */</span>
+<span class="hl-selector">.vibrant-fusion</span> <span class="hl-punct">{</span>
+  <span class="hl-prop">background</span><span class="hl-punct">:</span> <span class="hl-val">color-mix(in oklch, #3b82f6 50%, #ef4444)</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span></code></pre>
+      </div>
+    </section>
+
+    <!-- 3. Démo live interactive -->
+    <section id="demo" class="content-section">
+      <h2>⚡ 3. Démo Live Interactive</h2>
+      <p>
+        Ajustez en direct le ratio et les teintes pour voir <code>color-mix()</code> recalculer instantanément le rendu de la boîte et observer le nuancier d'échantillons :
+      </p>
+
+      <div class="demo-box">
+        <div class="demo-instruction">
+          <span>🧪</span> <strong>Laboratoire colorimétrique :</strong> Changez le curseur de pourcentage et les couleurs ci-dessous pour tester le mélange CSS en temps réel !
+        </div>
+
+        <div class="interactive-mix-area">
+          <!-- Contrôles interactifs JS Vanilla légers -->
+          <div class="mix-controls">
+            <div class="control-item">
+              <label for="picker1">Couleur 1 :</label>
+              <input type="color" id="picker1" value="#4f46e5">
+            </div>
+            <div class="control-item">
+              <label for="ratio-slider">Ratio (<span id="ratio-label">70%</span>) :</label>
+              <input type="range" id="ratio-slider" min="0" max="100" value="70">
+            </div>
+            <div class="control-item">
+              <label for="picker2">Couleur 2 :</label>
+              <input type="color" id="picker2" value="#ffffff">
+            </div>
+          </div>
+
+          <!-- La boîte demandée avec color-mix -->
+          <div class="box" id="mix-target-box">
+            <div id="box-title" style="font-size: 1.1rem; margin-bottom: 0.3rem;">70% Primary + White</div>
+            <span id="box-code">color-mix(in srgb, #4f46e5 70%, #ffffff)</span>
+          </div>
+
+          <!-- Nuancier comparatif -->
+          <div style="width: 100%;">
+            <div style="font-size: 0.9rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.75rem; text-align: center;">
+              Nuancier dérivé à partir de la couleur primaire :
+            </div>
+            <div class="palette">
+              <div class="step s-100">100%<br>Base</div>
+              <div class="step s-70">70%<br>+Blanc</div>
+              <div class="step s-50">50%<br>+Blanc</div>
+              <div class="step s-30">30%<br>+Blanc</div>
+              <div class="step s-dark">70%<br>+Noir</div>
+              <div class="step s-oklch">70% OKLCH<br>+Rose</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- 4. Tableau de compatibilité -->
+    <section id="compatibilite" class="content-section">
+      <h2>🌍 4. Tableau de Compatibilité</h2>
+      <p>
+        Support de la fonction <code>color-mix()</code> selon Can I Use & MDN :
+      </p>
+
+      <div class="compat-table-wrapper">
+        <table class="compat-table">
+          <thead>
+            <tr>
+              <th>Navigateur</th>
+              <th>Version minimale</th>
+              <th>Statut</th>
+              <th>Espaces colorimétriques</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌐</span> Google Chrome
+                </div>
+              </td>
+              <td><strong>111+</strong> (Mars 2023)</td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>srgb, oklch, oklab, hsl, hwb</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🧭</span> Safari (macOS & iOS)
+                </div>
+              </td>
+              <td><strong>16.2+</strong> (Déc. 2022)</td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>srgb, oklch, oklab, hsl, hwb</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🦊</span> Mozilla Firefox
+                </div>
+              </td>
+              <td><strong>113+</strong> (Mai 2023)</td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>srgb, oklch, oklab, hsl, hwb</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">🌊</span> Microsoft Edge
+                </div>
+              </td>
+              <td><strong>111+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Moteur Chromium</td>
+            </tr>
+            <tr>
+              <td>
+                <div class="browser-col">
+                  <span class="browser-icon">⭕</span> Opera
+                </div>
+              </td>
+              <td><strong>97+</strong></td>
+              <td><span class="status-badge status-supported">✓ Support total</span></td>
+              <td>Moteur Chromium</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="alert-card">
+        <div class="alert-title">💡 Baseline 2023 Widely Available</div>
+        <p style="font-size: 0.95rem; margin: 0;">
+          Grâce à son adoption simultanée par Chrome, Safari et Firefox début 2023, <code>color-mix()</code> fait partie intégrante de la Baseline Web avec plus de 94% de couverture globale.
+        </p>
+      </div>
+    </section>
+
+    <!-- 5. Note sur le fallback -->
+    <section id="fallback" class="content-section">
+      <h2>🛡️ 5. Note sur le Fallback & Stratégies de Repli</h2>
+      <p>
+        Comment intégrer sereinement <code>color-mix()</code> dans un projet de production ?
+      </p>
+
+      <ul class="fallback-steps">
+        <li>
+          <strong>Cascade CSS par déclaration préalable :</strong><br>
+          Fournissez simplement une valeur statique (hexadécimale ou hsl) juste avant la déclaration utilisant <code>color-mix()</code>. Les navigateurs anciens ignoreront la seconde ligne sans provoquer d'erreur :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-selector">.button</span> <span class="hl-punct">{</span>
+  <span class="hl-comment">/* 1. Repli pour vieux navigateurs */</span>
+  <span class="hl-prop">background-color</span><span class="hl-punct">:</span> <span class="hl-val">#818cf8</span><span class="hl-punct">;</span>
+  <span class="hl-comment">/* 2. Rendu dynamique moderne */</span>
+  <span class="hl-prop">background-color</span><span class="hl-punct">:</span> <span class="hl-val">color-mix(in srgb, var(--primary) 70%, white)</span><span class="hl-punct">;</span>
+<span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+
+        <li>
+          <strong>Détection via la règle <code>@supports (color: color-mix(...))</code> :</strong><br>
+          Permet de conditionner l'activation de thèmes entièrement dynamiques :
+          <div class="code-wrapper" style="margin-top: 0.5rem;">
+            <pre><code><span class="hl-selector">@supports (background-color: color-mix(in srgb, red, blue))</span> <span class="hl-punct">{</span>
+  <span class="hl-selector">:root</span> <span class="hl-punct">{</span>
+    <span class="hl-prop">--primary-hover</span><span class="hl-punct">:</span> <span class="hl-val">color-mix(in srgb, var(--primary) 85%, black)</span><span class="hl-punct">;</span>
+    <span class="hl-prop">--primary-light</span><span class="hl-punct">:</span> <span class="hl-val">color-mix(in srgb, var(--primary) 20%, transparent)</span><span class="hl-punct">;</span>
+  <span class="hl-punct">}</span>
+<span class="hl-punct">}</span></code></pre>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+  </div>
+
+  <footer style="text-align: center; padding: 2rem; color: var(--text-dim); font-size: 0.85rem; border-top: 1px solid var(--border-color); background: var(--bg-surface); margin-top: 4rem;">
+    <p>© 2026 — Fiches Techniques CSS • Développé en HTML / CSS / JS Vanilla</p>
+  </footer>
+
+  <!-- Script interactif léger pour la démo -->
+  <script>
+    const picker1 = document.getElementById('picker1');
+    const picker2 = document.getElementById('picker2');
+    const slider = document.getElementById('ratio-slider');
+    const ratioLabel = document.getElementById('ratio-label');
+    const box = document.getElementById('mix-target-box');
+    const boxTitle = document.getElementById('box-title');
+    const boxCode = document.getElementById('box-code');
+
+    function updateMix() {
+      const c1 = picker1.value;
+      const c2 = picker2.value;
+      const r = slider.value;
+      ratioLabel.textContent = `${r}%`;
+      box.style.setProperty('--mix-color-1', c1);
+      box.style.setProperty('--mix-color-2', c2);
+      box.style.setProperty('--mix-ratio', `${r}%`);
+      boxTitle.textContent = `${r}% C1 + ${100 - r}% C2`;
+      boxCode.textContent = `color-mix(in srgb, ${c1} ${r}%, ${c2})`;
+    }
+
+    picker1.addEventListener('input', updateMix);
+    picker2.addEventListener('input', updateMix);
+    slider.addEventListener('input', updateMix);
+  </script>
+
+</body>
+</html>
