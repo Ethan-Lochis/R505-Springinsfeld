@@ -1,0 +1,78 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: "Inter", sans-serif;
+
+  /* Primary Colors */
+  --color-lime-green: hsl(163, 72%, 41%);
+  --color-bright-red: hsl(356, 69%, 56%);
+  --color-facebook: hsl(208, 92%, 53%);
+  --color-twitter: hsl(203, 89%, 53%);
+  --color-youtube: hsl(348, 97%, 39%);
+
+  /* Toggle Colors */
+  --color-toggle-light: hsl(230, 22%, 74%);
+
+  /* Dark Theme Neutral Colors */
+  --color-dark-bg: hsl(230, 17%, 14%);
+  --color-dark-top-bg: hsl(232, 19%, 15%);
+  --color-dark-card: hsl(228, 28%, 20%);
+  --color-dark-card-hover: hsl(228, 28%, 25%);
+  --color-dark-text: hsl(228, 34%, 66%);
+  --color-dark-text-heading: hsl(0, 0%, 100%);
+
+  /* Light Theme Neutral Colors */
+  --color-light-bg: hsl(0, 0%, 100%);
+  --color-light-top-bg: hsl(225, 100%, 98%);
+  --color-light-card: hsl(227, 47%, 96%);
+  --color-light-card-hover: hsl(227, 47%, 90%);
+  --color-light-text: hsl(228, 12%, 44%);
+  --color-light-text-heading: hsl(230, 17%, 14%);
+}
+
+/* Gradients */
+@utility bg-instagram {
+  background: linear-gradient(135deg, hsl(37, 97%, 70%), hsl(329, 70%, 58%));
+}
+
+@utility bg-toggle-dark {
+  background: linear-gradient(to right, hsl(210, 78%, 56%), hsl(146, 68%, 55%));
+}
+
+body {
+  font-family: var(--font-sans), sans-serif;
+  font-size: 14px;
+}
+
+/* --- Animation de compteur avec @property et @keyframes --- */
+@property --num {
+  syntax: "<integer>";
+  initial-value: 0;
+  inherits: false;
+}
+
+@keyframes countUp {
+  from {
+    --num: 0;
+  }
+
+  to {
+    --num: var(--target-num, 0);
+  }
+}
+
+.counter-anim {
+  animation: countUp 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  counter-reset: num var(--num);
+  font-variant-numeric: tabular-nums;
+  display: inline-block;
+  line-height: 1;
+}
+
+.counter-anim::after {
+  content: counter(num) var(--suffix, "");
+}
+
+/* inspiré par https://css-tricks.com/animating-number-counters/ */
