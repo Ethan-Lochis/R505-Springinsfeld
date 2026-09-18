@@ -63,16 +63,6 @@ body {
   }
 }
 
-.counter-anim {
-  animation: countUp 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  counter-reset: num var(--num);
-  font-variant-numeric: tabular-nums;
-  display: inline-block;
-  line-height: 1;
-}
 
-.counter-anim::after {
-  content: counter(num) var(--suffix, "");
-}
 
 /* inspiré par https://css-tricks.com/animating-number-counters/ */
